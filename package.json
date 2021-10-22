@@ -9,6 +9,6 @@
   "author": "Kyle Stadelmann",
   "license": "ISC",
   "dependencies": {
-    "electron": "^5.0.10"
+    "electron": "^11.5.0"
   }
 }
