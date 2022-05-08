@@ -1,12 +1,14 @@
 import { Menu, MenuItem, MenuButton, SubMenu } from '@szhsin/react-menu'
 import '@szhsin/react-menu/dist/core.css' // idk why the css doesnt work
 import Header from "./Header"
+import TextBox from "./TextBox"
+import VotingToggle from "./VotingToggle"
 
 type VotingProps = {
     title?: string
 }
 
-const Leaderboard = ({ title }: VotingProps) => {
+const Voting = ({ title }: VotingProps) => {
     return (
         <div className="container">
             <Header title="Voting"/>
@@ -14,7 +16,7 @@ const Leaderboard = ({ title }: VotingProps) => {
             <Menu menuButton = {<MenuButton>{title}</MenuButton>}>
                 <MenuItem
                     onClick = {(e) => {
-                        // what you wanna do when clicked
+                        // idk how to make this work
                     }}>
                     
                     Challenger Stage Day 1
@@ -22,17 +24,20 @@ const Leaderboard = ({ title }: VotingProps) => {
 
                 <MenuItem>Legends Stage Day 1</MenuItem>
 
-                <SubMenu label = "Submenu Example">
-                    <MenuItem>idk what we would use a submenu for here</MenuItem>
-                </SubMenu>
-
             </Menu>
+            
+            {/* doesn't currently support capitalization */}
+            {/* hopefully you should be able to grab the team names data and pass it here */}
+            <VotingToggle teams={["NaVi", "FaZe"]} />
+
+            {/* TODO: display selected team somehow */}
+            <TextBox text="Team selected: " />
         </div>
     )
 }
 
-Leaderboard.defaultProps = {
+Voting.defaultProps = {
     title: "Voting"
 }
 
-export default Leaderboard
+export default Voting

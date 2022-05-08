@@ -1,8 +1,9 @@
 type ButtonProps = {
-	Component?: React.ComponentType;
-	color?: string;
-	text?: string;
-
+	Component?: React.ComponentType
+	color?: string
+	text?: string
+	onClick?: Function
+	teamNum?: 1
 };
 
 const Button = ({ text, color }: ButtonProps) => {
