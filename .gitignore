@@ -324,5 +324,5 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java,maven,node,visualstudiocode
 
 # CSGO Prediction App Custom Stuff
-Server/.idea
-Match-Fetcher/build
+build
+csgo-prediction-lib.tgz
