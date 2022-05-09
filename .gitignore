@@ -325,4 +325,4 @@ dist
 
 # CSGO Prediction App Custom Stuff
 build
-csgo-prediction-lib.tgz
+csgo-prediction-lib*.tgz
