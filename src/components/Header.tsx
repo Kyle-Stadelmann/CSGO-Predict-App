@@ -1,9 +1,8 @@
 import React from "react";
 
 // Demonstration of creating+using props with TS (necessary for repeat use)
-// idk if there's a way to specify component type (like ComponentType.Button or smth)
+// if typescript complains about possible any type just append ": any"
 type HeaderProps = {
-	Component?: React.ComponentType; // gives props object a type
 	title?: string;
 	textColor?: string;
 	unusedVar?: "Hello World";

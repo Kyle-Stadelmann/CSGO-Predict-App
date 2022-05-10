@@ -1,5 +1,4 @@
 type ButtonProps = {
-	Component?: React.ComponentType
 	color?: string
 	text?: string
 	onClick?: Function
