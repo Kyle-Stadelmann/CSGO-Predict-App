@@ -27,8 +27,9 @@ import Voting from "./components/Voting"
 		return (
 			<div className="App">
 				<Header title="CSGO Pickems" textColor="blue" />
-
-				<GoogleSignIn text="Sign in with Google" />
+				
+				{/* Need to set up client id here or no work */}
+				<GoogleSignIn text="Sign in with Google" id=CLIENT_ID_HERE/>
 			</div>
 		)
 	}

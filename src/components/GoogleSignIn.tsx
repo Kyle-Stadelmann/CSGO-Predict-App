@@ -1,9 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import GoogleLogin from 'react-google-login';
 
 type GoogleSignInProps = {
     text?: string
+    id: string
 }
 
 // this function runs after signin and response is the user data
@@ -21,7 +20,7 @@ const GoogleSignIn = ({ text }: GoogleSignInProps) => {
     return (
         <div>
             <GoogleLogin
-                clientId=""
+                clientId={id}
                 buttonText={text}
                 onSuccess={responseGoogle}
                 onFailure={responseGoogle}
@@ -33,7 +32,7 @@ const GoogleSignIn = ({ text }: GoogleSignInProps) => {
 }
 
 GoogleSignIn.defaultProps = {
-    text: "Login"
+    text: "Log in with Google"
 }
 
 export default GoogleSignIn
