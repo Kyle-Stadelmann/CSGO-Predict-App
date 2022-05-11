@@ -1,3 +1,4 @@
+import { User, updateUser } from 'csgo-prediction-lib';
 import GoogleLogin from 'react-google-login';
 
 type GoogleSignInProps = {
@@ -15,7 +16,7 @@ const responseGoogle = (response: any) => {
     console.log(response);
 }
 
-const GoogleSignIn = ({ text }: GoogleSignInProps) => {
+const GoogleSignIn = ({ text, id }: GoogleSignInProps) => {
     
     return (
         <div>

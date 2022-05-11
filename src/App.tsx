@@ -6,6 +6,8 @@ import Button from "./components/Button"
 import TextInput from "./components/TextInput"
 import Leaderboard from "./components/Leaderboard"
 import Voting from "./components/Voting"
+import 'dotenv/config'
+import express from 'express'
 
 // login screen
 /* function App() {
@@ -29,7 +31,7 @@ import Voting from "./components/Voting"
 				<Header title="CSGO Pickems" textColor="blue" />
 				
 				{/* Need to set up client id here or no work */}
-				<GoogleSignIn text="Sign in with Google" id=CLIENT_ID_HERE/>
+				<GoogleSignIn text="Sign in with Google" id={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}/>
 			</div>
 		)
 	}
