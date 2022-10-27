@@ -5,13 +5,13 @@ import React from "react";
 type HeaderProps = {
 	title?: string;
 	textColor?: string;
-	unusedVar?: "Hello World";
+	backgroundColor?: string;
 };
 
 // { title }: HeaderProps basically replaces the js "props"
-const Header = ({ title, textColor }: HeaderProps) => {
+const Header = ({ title, textColor, backgroundColor = "transparent" }: HeaderProps) => {
 	return (
-		<header style={{ color: textColor }}>
+		<header style={{ color: textColor, backgroundColor }}>
 			<h1>{title}</h1>
 		</header>
 	);

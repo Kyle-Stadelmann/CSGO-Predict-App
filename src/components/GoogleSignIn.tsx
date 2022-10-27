@@ -16,13 +16,13 @@ const responseGoogle = (response: any) => {
     console.log(response);
 }
 
-const GoogleSignIn = ({ text, id }: GoogleSignInProps) => {
+// https://developers.google.com/identity/gsi/web/guides/migration
+const GoogleSignIn = () => {
     
     return (
         <div>
             <GoogleLogin
-                clientId={id}
-                buttonText={text}
+                clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
                 onSuccess={responseGoogle}
                 onFailure={responseGoogle}
                 cookiePolicy={'single_host_origin'}
@@ -31,6 +31,9 @@ const GoogleSignIn = ({ text, id }: GoogleSignInProps) => {
         </div>
     )
 }
+
+/*
+*/
 
 GoogleSignIn.defaultProps = {
     text: "Log in with Google"
