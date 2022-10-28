@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { userObject } from "../types/userObject";
 
-// Demonstration of creating+using props with TS (necessary for repeat use)
-// if typescript complains about possible any type just append ": any"
 type HeaderProps = {
 	title?: string;
 	textColor?: string;
@@ -10,10 +9,32 @@ type HeaderProps = {
 
 // { title }: HeaderProps basically replaces the js "props"
 const Header = ({ title, textColor, backgroundColor = "transparent" }: HeaderProps) => {
+	const [ user, setUser ] = useState({} as userObject);
+	const signInButton = document.getElementById("sign-in-div");
+
+	useEffect(() => {
+		if (sessionStorage.getItem("CSGO_Predict_User")) {
+			setUser(JSON.parse(sessionStorage.getItem("CSGO_Predict_User")!));
+		}
+	}, [signInButton]);
+	
 	return (
-		<header style={{ color: textColor, backgroundColor }}>
-			<h1>{title}</h1>
-		</header>
+		<>
+			<div className="app-header">
+				<header style={{ color: textColor, backgroundColor }}>
+					<h1>
+					<h2>
+						{title}
+					</h2>
+					</h1>
+				</header>
+			</div>
+			<div className="signin-msg">
+				<h2>
+					{`${user.given_name ? `Hello, ${user.given_name}` : "Please sign in"}`}
+				</h2>
+			</div>
+		</>
 	);
 };
 

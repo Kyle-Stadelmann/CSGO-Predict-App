@@ -1,6 +1,44 @@
 .App {
 	margin: auto;
 	width: 50%;
-	border: 3px;
 	padding: 20px;
+	text-align: center;
+}
+
+.app-header {
+	margin: auto;
+	width: 50%;
+	padding: 20px;
+	text-align: center;
+}
+
+.signin-msg {
+	margin: auto;
+	width: 50%;
+	padding: 20px;
+	text-align: center;
+}
+
+.login-page {
+	margin: auto;
+	width: 50%;
+	padding: 20px;
+	text-align: center;
+}
+
+.dashboard {
+	margin: auto;
+	width: 50%;
+	padding: 20px;
+	text-align: center;
+}
+
+html {
+	background-image: url("./img/Background.png");
+}
+
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
