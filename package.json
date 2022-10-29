@@ -25,7 +25,8 @@
     "react-google-login": "^5.2.2",
     "react-router-dom": "^6.4.2",
     "typescript": "^4.6.4",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+	"csgo-predict-api": "file:node_modules/csgo-predict-api-1.0.0.tgz"
   },
   "devDependencies": {
     "react-scripts": "5.0.1"
