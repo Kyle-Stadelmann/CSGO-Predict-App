@@ -1,3 +1,9 @@
+# Installing CSGO-Prediction-Lib Dependency
+
+This project uses a custom API with a private [library](https://github.com/Kyle-Stadelmann/CSGO-Prediction-API).
+
+To set up this project, please follow installation instructions found in that repo.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
