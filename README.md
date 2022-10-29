@@ -2,7 +2,7 @@
 
 This project uses a custom API with a private [library](https://github.com/Kyle-Stadelmann/CSGO-Prediction-API).
 
-To set up this project, please follow installation instructions found in that repo.
+Please follow installation instructions found [here](https://github.com/Kyle-Stadelmann/CSGO-Prediction-API/tree/main#readme).
 
 # Getting Started with Create React App
 
