@@ -1,4 +1,4 @@
-export type userObject = {
+export interface userObject {
 	aud: string,
 	azp: string,
 	email: string,

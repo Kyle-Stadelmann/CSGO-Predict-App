@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { userObject } from "../types/userObject";
 
-type HeaderProps = {
-	title?: string;
-	textColor?: string;
-	backgroundColor?: string;
-};
-
-// { title }: HeaderProps basically replaces the js "props"
-const Header = ({ title, textColor, backgroundColor = "transparent" }: HeaderProps) => {
+const Header = ({ title, textColor, backgroundColor }: HeaderProps) => {
 	const [ user, setUser ] = useState({} as userObject);
-	const signInButton = document.getElementById("sign-in-div");
+	const signInButton = document.getElementById("signin-btn");
 
+    // this may (but shouldn't?) run every time Header is refreshed/re-rendered
+    // not a huge issue but yknow
 	useEffect(() => {
 		if (sessionStorage.getItem("CSGO_Predict_User")) {
 			setUser(JSON.parse(sessionStorage.getItem("CSGO_Predict_User")!));
@@ -22,11 +17,7 @@ const Header = ({ title, textColor, backgroundColor = "transparent" }: HeaderPro
 		<>
 			<div className="app-header">
 				<header style={{ color: textColor, backgroundColor }}>
-					<h1>
-					<h2>
-						{title}
-					</h2>
-					</h1>
+                    <h1>{title}</h1>
 				</header>
 			</div>
 			<div className="signin-msg">
@@ -36,11 +27,18 @@ const Header = ({ title, textColor, backgroundColor = "transparent" }: HeaderPro
 			</div>
 		</>
 	);
-};
+}
+
+type HeaderProps = {
+	title?: string;
+	textColor?: string;
+	backgroundColor?: string;
+}
 
 Header.defaultProps = {
 	title: "Header",
 	textColor: "black",
-};
+    backgroundColor: "transparent",
+}
 
 export default Header;
