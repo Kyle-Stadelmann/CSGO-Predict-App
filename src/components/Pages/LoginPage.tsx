@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignInButton from '../SignInButton';
 import jwt_decode from "jwt-decode";
+import { authPredictionUser } from 'csgo-predict-api';
 
 const google = window.google;
 
@@ -27,7 +28,9 @@ const LoginPage = () => {
 
 	// Sign in with Google Button
 	useEffect(() => {
-		function handleCallbackResponse(response: google.accounts.id.CredentialResponse) {
+		async function handleCallbackResponse(response: google.accounts.id.CredentialResponse) {
+			const user = await authPredictionUser(response.credential);
+
 			let userObject: userObject = jwt_decode(response.credential);
 			console.log(`User logged in with email: ${userObject.email}`);
 			// setUser(userObject);
