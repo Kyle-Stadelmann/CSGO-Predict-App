@@ -1,14 +1,20 @@
-// import a set of dummy matches so you can make the UI
 // TODO: load all matches where both teams exist? update whenever a stage ends?
 import { useState } from 'react';
 import { getStoredUser } from './lib/user-util';
 import Matches from '../Matches';
-import { DayPredictions, Prediction, submitDayPredictions } from 'csgo-predict-api';
+import { DayPredictions, Prediction, submitDayPredictions, Match as ApiMatch, Team as ApiTeam } from 'csgo-predict-api';
 import { DEFAULT_LEAGUE_ID } from '../../constant';
+
+// I WANT AN OBJECT THAT HOLDS MATCH_ID : TEAM_ID PAIRS
+export interface Picks {
+    [match_id: string] : number;
+}
 
 const Voting = () => {
     // this will be necessary once we have more than one day
     const [ currentDay, setDay ] = useState(1);
+    const [ matches, setMatches ] = useState([] as ApiMatch[]);
+    const [ picks, setPicks ] = useState({} as Picks);
 
     function submitPredictions() {
         const user = getStoredUser();
@@ -32,15 +38,13 @@ const Voting = () => {
     function getPredictionsList(): Prediction[] {
         const predictions: Prediction[] = [];
 
-        // how to get matches
-        /* 
         matches.map(match => {
             const prediction: Prediction = {
                 matchId: match.id,
-                choiceTeamId: // how do we get this
+                choiceTeamId: picks[match.id]
             }
             return prediction;
-        })*/
+        });
 
         return predictions;
     }
@@ -50,7 +54,7 @@ const Voting = () => {
             <br />
             <h2>Voting</h2>
             {/* event=import */}
-            <Matches />
+            <Matches matches={matches} setMatches={setMatches} picks={picks} setPicks={setPicks} />
             <button type="button" className="submit-predictions-btn" onClick={submitPredictions}>Submit Predictions!</button>
         </div>
     );
