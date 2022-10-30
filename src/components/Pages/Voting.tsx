@@ -1,6 +1,6 @@
 // import a set of dummy matches so you can make the UI
 // TODO: load all matches where both teams exist? update whenever a stage ends?
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { getStoredUser } from './lib/user-util';
 import Matches from '../Matches';
 import { DayPredictions, Prediction, submitDayPredictions } from 'csgo-predict-api';

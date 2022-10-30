@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import Dashboard from "./components/Pages/Dashboard";
 import LoginPage from "./components/Pages/LoginPage";
 import "./App.css";
+import { isLoggedIn } from "./components/Pages/lib/user-util";
 
 function App() {
 	const navigate = useNavigate();
@@ -28,7 +29,7 @@ function App() {
 			{/* This stuff will only appear on its path */}
 			<Routes>
 				<Route path="/" element={<LoginPage />} />
-				<Route path="/dashboard" element={<Dashboard />} />
+				<Route path="/dashboard" element={isLoggedIn() ? <Dashboard /> : <Navigate to="/"/>} />
 			</Routes>
 
 			{/* This stuff will appear on every page below the above content */}

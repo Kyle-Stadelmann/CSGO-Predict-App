@@ -10,3 +10,8 @@ export function getStoredUser(): User | undefined {
     }
     return JSON.parse(jsonStrUser) as User;
 }
+
+export function isLoggedIn(): boolean {
+    const user = getStoredUser();
+    return !!user;
+}

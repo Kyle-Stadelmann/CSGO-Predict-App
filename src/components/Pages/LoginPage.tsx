@@ -2,12 +2,10 @@
 // https://stackoverflow.com/questions/40399873/initializing-and-using-sessionstorage-in-react
 // we can probably create a userObject with useRef that persists in every component?
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignInButton from '../SignInButton';
-import jwt_decode from "jwt-decode";
 import { authPredictionUser, User } from 'csgo-predict-api';
-import { userObject } from '../../types/userObject';
 
 const google = window.google;
 

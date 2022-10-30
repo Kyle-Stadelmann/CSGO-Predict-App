@@ -1,6 +1,5 @@
 import { User } from "csgo-predict-api";
-import React, { useEffect, useState } from "react";
-import { userObject } from "../types/userObject";
+import { useEffect, useState } from "react";
 
 const Header = ({ title, textColor, backgroundColor }: HeaderProps) => {
 	const [ user, setUser ] = useState({} as User);
