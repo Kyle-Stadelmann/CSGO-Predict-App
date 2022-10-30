@@ -1,27 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+// possible issue with using sessionstorage
+// https://stackoverflow.com/questions/40399873/initializing-and-using-sessionstorage-in-react
+// we can probably create a userObject with useRef that persists in every component?
+
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignInButton from '../SignInButton';
 import jwt_decode from "jwt-decode";
 import { authPredictionUser } from 'csgo-predict-api';
+import { userObject } from '../../types/userObject';
 
 const google = window.google;
-
-type userObject = {
-	aud: string,
-	azp: string,
-	email: string,
-	email_verified: boolean,
-	exp: number,
-	family_name: string,
-	given_name: string,
-	iat: number,
-	iss: string,
-	jti: string,
-	name: string,
-	nbf: number,
-	picture: string,
-	sub: string,
-}
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -37,7 +25,7 @@ const LoginPage = () => {
 	
 			// can't use user for check because useState is async but awaiting doesn't work
 			if (userObject.email && userObject.email_verified === true) {
-				document.getElementById("sign-in-div")!.style.display = "none";
+				document.getElementById("signin-btn")!.style.display = "none";
 				sessionStorage.setItem("CSGO_Predict_User", JSON.stringify(userObject));
 				navigate("/dashboard", {replace: true});
 			}
@@ -49,11 +37,10 @@ const LoginPage = () => {
 		});
 
 		google.accounts.id.renderButton(
-			document.getElementById("sign-in-div")!,
+			document.getElementById("signin-btn")!,
 			{
-				theme: "outline", size: "large",
-				type: "standard"
-			}
+                type: "standard", size: "large",
+            }
 		);
 	}, [navigate]);
     
@@ -62,7 +49,7 @@ const LoginPage = () => {
 			<h1>Login Page</h1>
             <SignInButton />
         </div>
-    )
+    );
 }
 
-export default LoginPage
+export default LoginPage;
