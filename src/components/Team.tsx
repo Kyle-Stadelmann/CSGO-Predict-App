@@ -1,32 +1,38 @@
-import React, { MouseEventHandler } from 'react';
+import { Country, Id } from 'csgo-predict-api';
+import { MouseEventHandler } from 'react';
 
 function defaultTeamOnClick() {
     console.log("onClick unimplemented");
 }
 
-const Team = ({ teamName, teamId, logoUrl, onClick }: TeamProps) => {
+const Team = ({ id, name, logoUrl, country, rank, onClick }: TeamProps) => {
     return (
         <div>
             <img src={logoUrl} alt="img dne" className="match-pic" onClick={onClick} />
             <br />
-            {teamName}
+            {name}
         </div>
     );
 }
 
 type TeamProps = {
-	teamName?: string;
-    teamId?: string;
+    id: Id;
+	name: string;
     logoUrl?: string;
+    country: Country;
+    rank?: number;
     // xd
 	onClick?: MouseEventHandler<HTMLImageElement>;
 }
 
-Team.defaultProps = {
-    teamName: "No Team Name",
-    teamId: "No Team ID",
+const defaultProps: TeamProps = {
+    id: -1,
+	name: "N/A",
     logoUrl: "https://i.imgur.com/0SlPRxT.png",
+    country: {name: "No Country", code: "No code"},
+    rank: -1,
     onClick: defaultTeamOnClick,
 }
+Team.defaultProps = defaultProps; 
 
 export default Team;

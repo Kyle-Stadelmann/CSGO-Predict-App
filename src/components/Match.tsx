@@ -1,40 +1,46 @@
 // TODO: add a submitted status indicator at the right side
 // TODO: make teams show up on opposite ends of div rather than stacked vertically
-import React, { useState } from 'react';
+import { Match as ApiMatch, Team as ApiTeam } from 'csgo-predict-api';
+import { useState } from 'react';
 import Team from './Team';
 
-const Match = () => {
-    const [ pickedTeam, setPickedTeam ] = useState("none");
-    const [ team1, setTeam1 ] = useState("Team 1");
-    const [ team2, setTeam2 ] = useState("Team 2");
+type MatchProps = {
+    match: ApiMatch;
+}
+
+const Match = ({ match }: MatchProps) => {
+    const team1 = match.team1;
+    const team2 = match.team2;
+
+    const [ pickedTeam, setPickedTeam ] = useState({} as ApiTeam);
     // load team1 and team2 using setTeamX
 
     function handleTeam1() {
-        setPickedTeam(team1);
+        setPickedTeam(match.team1);
         // set picked team in DayPredictions object
     }
 
     function handleTeam2() {
-        setPickedTeam(team2);
+        setPickedTeam(match.team2);
     }
 
     return (
         // TODO: make selected team have an outline or some sort of visual indication of choice
         // can possibly just get rid of "current picked team"
         <div className="match">
-            {`${team1} vs. ${team2}`}
+            {`${team1.name} vs. ${team2.name}`}
             &nbsp;
             <div className="team-container">
                 {/* if you put a space the css can recognize just the first slice, p cool */}
                 <div className="team left">
-                    <Team teamName={team1} onClick={handleTeam1} />
+                    <Team id={team1.id} name={team1.name} logoUrl={team1.logo_url} country={team1.country} rank={team1.rank} onClick={handleTeam1} />
                 </div>
                 <div className="team right">
-                    <Team teamName={team2} onClick={handleTeam2} />
+                    <Team id={team2.id} name={team2.name} logoUrl={team2.logo_url} country={team2.country} rank={team2.rank} onClick={handleTeam2} />
                 </div>
             </div>
             &nbsp;
-            {`Currently picked team: ${pickedTeam}`}
+            {`Currently picked team: ${pickedTeam.name ?? "N/A"}`}
         </div>
     );
 }

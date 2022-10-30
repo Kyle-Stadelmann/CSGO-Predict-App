@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SignInButton from '../SignInButton';
 import jwt_decode from "jwt-decode";
-import { authPredictionUser } from 'csgo-predict-api';
+import { authPredictionUser, User } from 'csgo-predict-api';
 import { userObject } from '../../types/userObject';
 
 const google = window.google;
@@ -17,23 +17,27 @@ const LoginPage = () => {
 	// Sign in with Google Button
 	useEffect(() => {
 		async function handleCallbackResponse(response: google.accounts.id.CredentialResponse) {
-			const user = await authPredictionUser(response.credential);
-
-			let userObject: userObject = jwt_decode(response.credential);
-			console.log(`User logged in with email: ${userObject.email}`);
-			// setUser(userObject);
-	
-			// can't use user for check because useState is async but awaiting doesn't work
-			if (userObject.email && userObject.email_verified === true) {
-				document.getElementById("signin-btn")!.style.display = "none";
-				sessionStorage.setItem("CSGO_Predict_User", JSON.stringify(userObject));
-				navigate("/dashboard", {replace: true});
+			let user: User;
+			try {
+				user = await authPredictionUser(response.credential);
+			} catch (e) {
+				// TODO: Auth didn't work lets do something?
+				// Maybe just refresh page and start over? Not sure when this would happen.
+				// Since we're in this callback it should succesfully auth
+				return;
 			}
+
+			// TODO: How do we log to server console in react 
+			console.log(`User logged in with email: ${user.email}`);
+	
+			document.getElementById("signin-btn")!.style.display = "none";
+			sessionStorage.setItem("CSGO_Predict_User", JSON.stringify(user));
+			navigate("/dashboard", {replace: true});
 		}
 
 		google.accounts.id.initialize({
 			client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID!,
-			callback: handleCallbackResponse!
+			callback: handleCallbackResponse
 		});
 
 		google.accounts.id.renderButton(

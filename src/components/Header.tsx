@@ -1,8 +1,9 @@
+import { User } from "csgo-predict-api";
 import React, { useEffect, useState } from "react";
 import { userObject } from "../types/userObject";
 
 const Header = ({ title, textColor, backgroundColor }: HeaderProps) => {
-	const [ user, setUser ] = useState({} as userObject);
+	const [ user, setUser ] = useState({} as User);
 	const signInButton = document.getElementById("signin-btn");
 
     // this may (but shouldn't?) run every time Header is refreshed/re-rendered
@@ -10,7 +11,7 @@ const Header = ({ title, textColor, backgroundColor }: HeaderProps) => {
 	useEffect(() => {
 		if (sessionStorage.getItem("CSGO_Predict_User")) {
 			setUser(JSON.parse(sessionStorage.getItem("CSGO_Predict_User")!));
-		}
+		} 
 	}, [signInButton]);
 	
 	return (
@@ -22,7 +23,7 @@ const Header = ({ title, textColor, backgroundColor }: HeaderProps) => {
 			</div>
 			<div className="signin-msg">
 				<h2>
-					{`${user.given_name ? `Hello, ${user.given_name}` : "Please sign in"}`}
+					{`${user.name ? `Hello, ${user.name}` : "Please sign in"}`}
 				</h2>
 			</div>
 		</>
