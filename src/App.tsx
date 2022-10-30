@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import PickemsIcon from "./img/CSGOPickemsIcon.png";
-
-import "./App.css";
 import Header from "./components/Header";
 import Dashboard from "./components/Pages/Dashboard";
 import LoginPage from "./components/Pages/LoginPage";
+import "./App.css";
 
 function App() {
 	const navigate = useNavigate();
@@ -34,9 +32,8 @@ function App() {
 			</Routes>
 
 			{/* This stuff will appear on every page below the above content */}
-			<img src={PickemsIcon} alt="this pic dotn exist BRUH" className="center"></img>
 		</>
-	)
+	);
 }
 
 export default App;

@@ -3,7 +3,7 @@ type ButtonProps = {
 	text?: string
 	onClick?: Function
 	teamNum?: 1
-};
+}
 
 const Button = ({ text, color }: ButtonProps) => {
 	const onClick = () => {
@@ -18,11 +18,11 @@ const Button = ({ text, color }: ButtonProps) => {
 			</button>
 		</div>
 	);
-};
+}
 
 Button.defaultProps = {
 	text: "Button",
 	color: "#111111",
-};
+}
 
 export default Button;
