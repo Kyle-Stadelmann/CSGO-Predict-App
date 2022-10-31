@@ -2,19 +2,18 @@
 import { useState } from 'react';
 import { getStoredUser } from './lib/user-util';
 import Matches from '../Matches';
-import { DayPredictions, Prediction, submitDayPredictions, Match as ApiMatch, Team as ApiTeam } from 'csgo-predict-api';
+import { DayPredictions, Prediction, submitDayPredictions, Match as ApiMatch, Team as ApiTeam, Id, Team } from 'csgo-predict-api';
 import { DEFAULT_LEAGUE_ID } from '../../constant';
 
-// I WANT AN OBJECT THAT HOLDS MATCH_ID : TEAM_ID PAIRS
-export interface Picks {
-    [match_id: string] : number;
+export interface MatchPicks {
+    [match_id: Id] : Team;
 }
 
 const Voting = () => {
     // this will be necessary once we have more than one day
     const [ currentDay, setDay ] = useState(1);
     const [ matches, setMatches ] = useState([] as ApiMatch[]);
-    const [ picks, setPicks ] = useState({} as Picks);
+    const [ picks, setPicks ] = useState({} as MatchPicks);
 
     function submitPredictions() {
         const user = getStoredUser();
@@ -36,12 +35,14 @@ const Voting = () => {
     }
 
     function getPredictionsList(): Prediction[] {
-        const predictions: Prediction[] = [];
-
-        matches.map(match => {
+        const predictions = matches.flatMap(match => {
+            if (!picks[match.id]) {
+                // No team picked, so we don't submit a prediction
+                return [];
+            }
             const prediction: Prediction = {
                 matchId: match.id,
-                choiceTeamId: picks[match.id]
+                choiceTeamId: picks[match.id].id
             }
             return prediction;
         });
