@@ -17,7 +17,7 @@ function App() {
 		function handleLoggedIn() {
 			if (storedUser?.email_verified) navigate("/dashboard");
 		}
-		
+
 		handleLoggedIn();
 	}, [navigate, storedUser?.email_verified]);
 
@@ -29,7 +29,7 @@ function App() {
 			{/* This stuff will only appear on its path */}
 			<Routes>
 				<Route path="/" element={<LoginPage />} />
-				<Route path="/dashboard" element={isLoggedIn() ? <Dashboard /> : <Navigate to="/"/>} />
+				<Route path="/dashboard" element={isLoggedIn() ? <Dashboard /> : <Navigate to="/" />} />
 			</Routes>
 
 			{/* This stuff will appear on every page below the above content */}

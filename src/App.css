@@ -20,8 +20,8 @@
 }
 
 .signin-btn {
-    width: auto;
-    margin: auto;
+	width: auto;
+	margin: auto;
 }
 
 .login-page {
@@ -49,25 +49,25 @@ html {
 }
 
 .match {
-    border: 1px solid;
-    padding: 2px;
+	border: 1px solid;
+	padding: 2px;
 }
 
 .match-pic {
-    width: 10%;
-    height: 10%;
-    pointer-events: all;
-    cursor: pointer;
+	width: 10%;
+	height: 10%;
+	pointer-events: all;
+	cursor: pointer;
 }
 
 .match-window {
-    border: 2px solid
+	border: 2px solid;
 }
 
 .team-container {
-    display: flex;
+	display: flex;
 }
 
 .team {
-    flex: 1;
+	flex: 1;
 }
