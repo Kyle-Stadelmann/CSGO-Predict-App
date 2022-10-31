@@ -21,7 +21,7 @@ const Header = ({ title, textColor, backgroundColor }: HeaderProps) => {
 				</header>
 			</div>
 			<div className="signin-msg">
-				<h2>{`${user.name ? `Hello, ${user.name}` : "Please sign in"}`}</h2>
+				<h2 id="signin-msg-header">{`${user.name ? `Hello, ${user.name}` : "Please sign in"}`}</h2>
 			</div>
 		</>
 	);

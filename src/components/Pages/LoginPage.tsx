@@ -22,6 +22,8 @@ const LoginPage = () => {
 				// TODO: Auth didn't work lets do something?
 				// Maybe just refresh page and start over? Not sure when this would happen.
 				// Since we're in this callback it should succesfully auth
+				const signInHeader = document.getElementById("signin-msg-header");
+				signInHeader!.innerHTML = "Sorry you're not whitelisted";
 				return;
 			}
 
