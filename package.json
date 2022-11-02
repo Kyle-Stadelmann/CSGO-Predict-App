@@ -10,21 +10,19 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
-    "cross-env": "^7.0.3",
     "csgo-predict-api": "file:csgo-predict-api-1.0.0.tgz",
-    "dotenv-flow": "^3.2.0",
     "google-auth-library": "^8.6.0",
     "jwt-decode": "^3.1.2",
     "prettier": "^2.6.2",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-google-login": "^5.2.2",
+    "react-native-fs": "^2.20.0",
     "react-router-dom": "^6.4.2",
     "typescript": "^4.6.4",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@types/dotenv-flow": "^3.2.0",
     "@types/google.accounts": "^0.0.2",
     "@types/jest": "^27.5.0",
     "@types/node": "^16.11.33",
@@ -33,8 +31,8 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development react-scripts start",
-    "build": "cross-env NODE_ENV=production react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "npx prettier src/ --write"

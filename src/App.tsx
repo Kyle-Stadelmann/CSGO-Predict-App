@@ -5,9 +5,6 @@ import Dashboard from "./components/Pages/Dashboard";
 import LoginPage from "./components/Pages/LoginPage";
 import "./App.css";
 import { isLoggedIn } from "./components/Pages/lib/user-util";
-import * as dotenvFlow from "dotenv-flow";
-
-dotenvFlow.config();
 
 function App() {
 	const navigate = useNavigate();
