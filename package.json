@@ -10,12 +10,9 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
-    "@types/google.accounts": "^0.0.2",
-    "@types/jest": "^27.5.0",
-    "@types/node": "^16.11.33",
-    "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.3",
+    "cross-env": "^7.0.3",
     "csgo-predict-api": "file:csgo-predict-api-1.0.0.tgz",
+    "dotenv-flow": "^3.2.0",
     "google-auth-library": "^8.6.0",
     "jwt-decode": "^3.1.2",
     "prettier": "^2.6.2",
@@ -27,12 +24,17 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3",
+    "@types/dotenv-flow": "^3.2.0",
+    "@types/google.accounts": "^0.0.2",
+    "@types/jest": "^27.5.0",
+    "@types/node": "^16.11.33",
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.3",
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "cross-env REACT_APP_GOOGLE_CLIENT_ID=\"181196362892-2sdb2jucpi041c2nmf06gm4vdi52c04n.apps.googleusercontent.com\" REACT_APP_BACKEND_URI=\"https://localhost:3846\" react-scripts start",
-    "build": "react-scripts build",
+    "start": "cross-env NODE_ENV=development react-scripts start",
+    "build": "cross-env NODE_ENV=production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "npx prettier src/ --write"
