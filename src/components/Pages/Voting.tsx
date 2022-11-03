@@ -22,6 +22,7 @@ const Voting = () => {
 	const [currentDay, setDay] = useState(1);
 	const [matches, setMatches] = useState([] as ApiMatch[]);
 	const [picks, setPicks] = useState({} as MatchPicks);
+	const [predsSubmittedStr, setPredsSubmittedStr] = useState("");
 
 	function submitPredictions() {
 		const user = getStoredUser();
@@ -40,6 +41,8 @@ const Voting = () => {
 		submitDayPredictions(dayPreds);
 
 		console.log(`Submitted predictions for day: ${currentDay}`);
+
+		setPredsSubmittedStr("Successfully submitted predictions!");
 	}
 
 	function getPredictionsList(): Prediction[] {
@@ -67,6 +70,7 @@ const Voting = () => {
 			<button type="button" className="submit-predictions-btn" onClick={submitPredictions}>
 				Submit Predictions!
 			</button>
+			<h2>{predsSubmittedStr}</h2>
 		</div>
 	);
 };
