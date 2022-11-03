@@ -5,6 +5,16 @@
 	text-align: center;
 }
 
+.app {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
 .app-header {
 	margin: auto;
 	width: 50%;
@@ -38,10 +48,6 @@
 	text-align: center;
 }
 
-html {
-	background-image: url("./img/Background.png");
-}
-
 .center {
 	display: block;
 	margin-left: auto;
@@ -70,4 +76,16 @@ html {
 
 .team {
 	flex: 1;
+}
+
+.submit-predictions-btn {
+	position: relative;
+	top: 10px;
+	scale: 1.7;
+}
+
+.theme-btn {
+	position: absolute;
+	bottom: 0;
+	right: 0;
 }

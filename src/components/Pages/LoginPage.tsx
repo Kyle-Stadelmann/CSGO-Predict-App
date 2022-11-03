@@ -17,8 +17,6 @@ const LoginPage = () => {
 		async function handleCallbackResponse(response: google.accounts.id.CredentialResponse) {
 			let user: User;
 			try {
-				console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID)
-				console.log(process.env.REACT_APP_BACKEND_URI)
 				user = await authPredictionUser(response.credential);
 			} catch (e) {
 				// TODO: Auth didn't work lets do something?

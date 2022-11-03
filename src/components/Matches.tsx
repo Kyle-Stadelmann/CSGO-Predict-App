@@ -28,10 +28,9 @@ const Matches = ({ matches, setMatches, picks, setPicks }: MatchesProps) => {
 
 	function createMatchElement(match: ApiMatch): JSX.Element {
 		return (
-			<>
-				<Match match={match} picks={picks} setPicks={setPicks} />
-				<br></br>
-			</>
+			<div style={{backgroundColor: "whitesmoke", opacity: "0.6"}}>
+				<Match match={match} picks={picks} setPicks={setPicks}/>
+			</div>
 		);
 	}
 

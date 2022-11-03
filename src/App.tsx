@@ -1,14 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import Dashboard from "./components/Pages/Dashboard";
 import LoginPage from "./components/Pages/LoginPage";
 import "./App.css";
 import { isLoggedIn } from "./components/Pages/lib/user-util";
+import ThemeButton from "./components/ThemeButton";
+import { THEME_IMGS } from "./constant";
 
 function App() {
 	const navigate = useNavigate();
 	const storedUser = JSON.parse(sessionStorage.getItem("CSGO_Predict_User")!);
+
+	const [bgImageIndex, setBgImageIndex] = useState(0);
 
 	// https://stackoverflow.com/a/71037538/17208152
 	// dont show login page if user is verifiedly logged in this session
@@ -22,18 +26,19 @@ function App() {
 	}, [navigate, storedUser?.email_verified]);
 
 	return (
-		<>
+		<div className="app" style={{backgroundImage: `url(${THEME_IMGS[bgImageIndex]})`}}>
 			{/* This stuff will appear on top of every page */}
 			<Header title="CSGO Predictions" backgroundColor="blue" />
 
 			{/* This stuff will only appear on its path */}
 			<Routes>
-				<Route path="/" element={<LoginPage />} />
+				<Route path="/" element={isLoggedIn() ? <Navigate to="/dashboard"/> : <LoginPage />} />
 				<Route path="/dashboard" element={isLoggedIn() ? <Dashboard /> : <Navigate to="/" />} />
 			</Routes>
 
 			{/* This stuff will appear on every page below the above content */}
-		</>
+			<ThemeButton bgImageIndex={bgImageIndex} setBgImageIndex={setBgImageIndex}></ThemeButton>
+		</div>
 	);
 }
 
