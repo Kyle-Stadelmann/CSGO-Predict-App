@@ -24,7 +24,7 @@ const Voting = () => {
 	const [picks, setPicks] = useState({} as MatchPicks);
 	const [predsSubmittedStr, setPredsSubmittedStr] = useState("");
 
-	function submitPredictions() {
+	async function submitPredictions() {
 		const user = getStoredUser();
 		if (!user) {
 			// No authed user do nothing for now
@@ -38,11 +38,12 @@ const Voting = () => {
 			predictions: getPredictionsList(),
 		};
 
-		submitDayPredictions(dayPreds);
-
-		console.log(`Submitted predictions for day: ${currentDay}`);
-
-		setPredsSubmittedStr("Successfully submitted predictions!");
+		try {
+			await submitDayPredictions(dayPreds);
+			setPredsSubmittedStr("Successfully submitted predictions!");
+		} catch (e) {
+			setPredsSubmittedStr("Error submitting predictions. Perhaps the match has already started.");
+		}
 	}
 
 	function getPredictionsList(): Prediction[] {
