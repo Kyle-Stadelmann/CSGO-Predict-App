@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SignInButton from "../SignInButton";
 import { authPredictionUser, User } from "csgo-predict-api";
+import { USER_SESSION_STORAGE_KEY } from "./lib/user-util";
 
 const google = window.google;
 
@@ -28,11 +29,10 @@ const LoginPage = () => {
 				return;
 			}
 
-			// TODO: How do we log to server console in react
 			console.log(`User logged in with email: ${user.email}`);
 
 			document.getElementById("signin-btn")!.style.display = "none";
-			sessionStorage.setItem("CSGO_Predict_User", JSON.stringify(user));
+			sessionStorage.setItem(USER_SESSION_STORAGE_KEY, JSON.stringify(user));
 			navigate("/dashboard", { replace: true });
 		}
 
