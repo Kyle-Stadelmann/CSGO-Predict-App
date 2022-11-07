@@ -1,5 +1,5 @@
 // TODO: add a submitted status indicator at the right side
-import { Match as ApiMatch } from "csgo-predict-api";
+import { Match as ApiMatch, Team as ApiTeam } from "csgo-predict-api";
 import { MatchPicks } from "./Pages/Voting";
 import Team from "./Team";
 
@@ -13,17 +13,29 @@ const Match = ({ match, picks, setPicks }: MatchProps) => {
 	const team1 = match.team1;
 	const team2 = match.team2;
 	// Note: undefined before user picks a team
-	const pickedTeam = picks[match.id];
+	const pickedTeam = getPickedTeam();
+
+	function getPickedTeam(): ApiTeam | undefined {
+		const pickedTeamId = picks[match.id];
+		switch (pickedTeamId) {
+			case team1.id:
+				return team1;
+			case team2.id:
+				return team2;
+			default:
+				return;
+		}
+	}
 
 	function handleTeam1Picked() {
 		const tempPicks = { ...picks };
-		tempPicks[match.id] = team1;
+		tempPicks[match.id] = team1.id;
 		setPicks(tempPicks);
 	}
 
 	function handleTeam2Picked() {
 		const tempPicks = { ...picks };
-		tempPicks[match.id] = team2;
+		tempPicks[match.id] = team2.id;
 		setPicks(tempPicks);
 	}
 

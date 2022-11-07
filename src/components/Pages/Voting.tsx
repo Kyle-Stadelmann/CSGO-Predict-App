@@ -1,5 +1,5 @@
 // TODO: load all matches where both teams exist? update whenever a stage ends?
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getStoredUser } from "./lib/user-util";
 import Matches from "../Matches";
 import {
@@ -10,11 +10,13 @@ import {
 	Team as ApiTeam,
 	Id,
 	Team,
+	getDayPredictions,
 } from "csgo-predict-api";
 import { DEFAULT_LEAGUE_ID } from "../../constant";
 
+// Match id -> Picked team Id
 export interface MatchPicks {
-	[match_id: Id]: Team;
+	[match_id: Id]: Id;
 }
 
 const Voting = () => {
@@ -54,13 +56,32 @@ const Voting = () => {
 			}
 			const prediction: Prediction = {
 				matchId: match.id,
-				choiceTeamId: picks[match.id].id,
+				choiceTeamId: picks[match.id],
 			};
 			return prediction;
 		});
 
 		return predictions;
 	}
+
+	async function initPicks() {
+		try {
+			const userId = getStoredUser()?.id;
+			if (!userId) return;
+			const dayPreds = await getDayPredictions(userId, DEFAULT_LEAGUE_ID);
+			const initPicks: MatchPicks = {};
+			dayPreds.predictions.forEach(p => {
+				initPicks[p.matchId] = p.choiceTeamId;
+			});
+			setPicks(initPicks);
+		} catch (e) {
+			console.error(e)
+		}
+	}
+
+	useEffect(() => {
+		initPicks();
+	}, []);
 
 	return (
 		<div>
