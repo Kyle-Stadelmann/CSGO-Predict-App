@@ -7,6 +7,7 @@ import "./App.css";
 import { isLoggedIn } from "./components/Pages/lib/user-util";
 import ThemeButton from "./components/ThemeButton";
 import { THEME_IMGS } from "./constant";
+import Management from "./components/Pages/Management";
 
 function App() {
 	const navigate = useNavigate();
@@ -33,7 +34,8 @@ function App() {
 			{/* This stuff will only appear on its path */}
 			<Routes>
 				<Route path="/" element={isLoggedIn() ? <Navigate to="/dashboard"/> : <LoginPage />} />
-				<Route path="/dashboard" element={isLoggedIn() ? <Dashboard /> : <Navigate to="/" />} />
+				<Route path="/dashboard/" element={isLoggedIn() ? <Dashboard /> : <Navigate to="/" />} />
+                <Route path="/management" element={isLoggedIn() ? <Management /> : <Navigate to="/" />} />
 			</Routes>
 
 			{/* This stuff will appear on every page below the above content */}

@@ -8,6 +8,7 @@ import { MatchPicks } from "./Pages/Voting";
 const Matches = ({ matches, setMatches, picks, setPicks }: MatchesProps) => {
 	useEffect(() => {
 		fetchMatches();
+        // it doesn't like something about the fetchMatches not being a dependency
 	}, []);
 
 	async function fetchMatches() {
@@ -33,9 +34,10 @@ const Matches = ({ matches, setMatches, picks, setPicks }: MatchesProps) => {
 
 	function createMatchElement(match: ApiMatch): JSX.Element {
 		return (
-			<div style={{backgroundColor: "whitesmoke", opacity: "0.6"}}>
-				<Match match={match} picks={picks} setPicks={setPicks}/>
-			</div>
+            // i moved the style (background color, opacity) to the match css
+            // This message will self-destruct in 5 seconds.
+            // (delete these comments when you read this)
+			<Match match={match} picks={picks} setPicks={setPicks} />
 		);
 	}
 

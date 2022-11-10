@@ -84,7 +84,7 @@ const Voting = () => {
 	}, []);
 
 	return (
-		<div>
+		<div className="voting-window">
 			<br />
 			<h2>Voting</h2>
 			{/* event=import */}

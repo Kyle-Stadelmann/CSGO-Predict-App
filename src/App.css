@@ -57,11 +57,13 @@
 .match {
 	border: 1px solid;
 	padding: 2px;
+    background-color: whitesmoke;
+    opacity: 0.6;
 }
 
 .match-pic {
-	width: 10%;
-	height: 10%;
+	width: 20%;
+	height: 20%;
 	pointer-events: all;
 	cursor: pointer;
 }
@@ -88,4 +90,37 @@
 	position: absolute;
 	bottom: 0;
 	right: 0;
+}
+
+/* horizontal offset should automatically scale with leaderboard if it's flex */
+/* but we gotta find a way to put space in between the two */
+.voting-window {
+    margin: auto;
+	width: 40%;
+	padding: 40px;
+	text-align: center;
+    flex: 1;
+}
+
+.leaderboard {
+    flex: 1;
+}
+
+.management {
+    text-align: center;
+}
+
+.tournament {
+    display: flex;
+}
+
+.player {
+	border: 1px solid;
+	padding: 2px;
+    background-color: #F5F5F5;
+    opacity: 0.6;
+}
+
+.players {
+    border: 2px solid;
 }

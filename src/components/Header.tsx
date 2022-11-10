@@ -8,8 +8,8 @@ const Header = ({ title, textColor, backgroundColor }: HeaderProps) => {
 	// this may (but shouldn't?) run every time Header is refreshed/re-rendered
 	// not a huge issue but yknow
 	useEffect(() => {
-		if (sessionStorage.getItem("CSGO_Predict_User")) {
-			setUser(JSON.parse(sessionStorage.getItem("CSGO_Predict_User")!));
+		if (sessionStorage.getItem("user")) {
+			setUser(JSON.parse(sessionStorage.getItem("user")!));
 		}
 	}, [signInButton]);
 
