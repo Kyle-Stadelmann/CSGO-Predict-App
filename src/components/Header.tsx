@@ -1,18 +1,6 @@
-import { User } from "csgo-predict-api";
-import { useEffect, useState } from "react";
+import { getStoredUser } from "../lib/user-util";
 
 const Header = ({ title, textColor, backgroundColor }: HeaderProps) => {
-	const [user, setUser] = useState({} as User);
-	const signInButton = document.getElementById("signin-btn");
-
-	// this may (but shouldn't?) run every time Header is refreshed/re-rendered
-	// not a huge issue but yknow
-	useEffect(() => {
-		if (sessionStorage.getItem("user")) {
-			setUser(JSON.parse(sessionStorage.getItem("user")!));
-		}
-	}, [signInButton]);
-
 	return (
 		<>
 			<div className="app-header">
@@ -21,7 +9,9 @@ const Header = ({ title, textColor, backgroundColor }: HeaderProps) => {
 				</header>
 			</div>
 			<div className="signin-msg">
-				<h2 id="signin-msg-header">{`${user.name ? `Hello, ${user.name}` : "Please sign in"}`}</h2>
+				<h2 id="signin-msg-header">{`${
+					getStoredUser()?.name ? `Hello, ${getStoredUser()!.name}` : "Please sign in"
+				}`}</h2>
 			</div>
 		</>
 	);

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SignInButton from "../SignInButton";
 import { authPredictionUser, User } from "csgo-predict-api";
-import { USER_SESSION_STORAGE_KEY } from "./lib/user-util";
+import { USER_SESSION_STORAGE_KEY } from "../../lib/user-util";
 
 const google = window.google;
 
@@ -23,7 +23,7 @@ const LoginPage = () => {
 				// TODO: Auth didn't work lets do something?
 				// Maybe just refresh page and start over? Not sure when this would happen.
 				// Since we're in this callback it should succesfully auth
-				console.log(e)
+				console.log(e);
 				const signInHeader = document.getElementById("signin-msg-header");
 				signInHeader!.innerHTML = "Sorry you're not whitelisted";
 				return;

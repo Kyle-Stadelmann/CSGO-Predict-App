@@ -12,7 +12,6 @@ type MatchProps = {
 const Match = ({ match, picks, setPicks }: MatchProps) => {
 	const team1 = match.team1;
 	const team2 = match.team2;
-	// Note: undefined before user picks a team
 	const pickedTeam = getPickedTeam();
 
 	function getPickedTeam(): ApiTeam | undefined {

@@ -2,16 +2,15 @@
 // the only special stuff it's gonna have is a dropdown for selecting tournaments
 // and then like the title of the tournament off to the right
 // it'll have a header containing the above information then the tournament below the header
-import React from 'react'
-import Tournament from './Tournament'
+import Tournament from "./Tournament";
 
 const Management = () => {
-    return (
-        <div className="management">
-            <h1>Management Page</h1>
-            <Tournament />
-        </div>
-    )
-}
+	return (
+		<div className="management">
+			<h1>Management Page</h1>
+			<Tournament />
+		</div>
+	);
+};
 
-export default Management
+export default Management;

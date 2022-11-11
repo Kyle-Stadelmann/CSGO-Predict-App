@@ -1,21 +1,20 @@
 // this page will host all available tournaments instead of a single <Voting />
 // each <Voting /> will be housed in a <Tournament /> page rather than in here
-import React from "react";
-import { Link, Route, Routes } from "react-router-dom";
-import Management from "./Management";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
 	return (
 		<div className="dashboard">
 			<h1>Dashboard</h1>
-            <Link to="/management">
-                <button>
-                    Click here to go to the Management tab!
-                    This button will eventually be replaced with a beautiful menu full of all the tournaments you're currently participating in, but for now it is an ugly button (it's worth trust)
-                </button>
-            </Link>
+			<Link to="/management">
+				<button>
+					Click here to go to the Management tab! This button will eventually be replaced with a beautiful
+					menu full of all the tournaments you're currently participating in, but for now it is an ugly button
+					(it's worth trust)
+				</button>
+			</Link>
 			{/* put a button here that links to management */}
-            {/* eventually there'll be multiple buttons for each tournament but for now just a single hardcoded management */}
+			{/* eventually there'll be multiple buttons for each tournament but for now just a single hardcoded management */}
 		</div>
 	);
 };
