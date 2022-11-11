@@ -92,8 +92,6 @@
 	right: 0;
 }
 
-/* horizontal offset should automatically scale with leaderboard if it's flex */
-/* but we gotta find a way to put space in between the two */
 .voting-window {
     margin: auto;
 	width: 40%;
@@ -102,7 +100,11 @@
     flex: 1;
 }
 
-.leaderboard {
+.leaderboard-window {
+    margin: auto;
+	width: 40%;
+	padding: 40px;
+	text-align: center;
     flex: 1;
 }
 
@@ -116,11 +118,14 @@
 
 .player {
 	border: 1px solid;
-	padding: 2px;
-    background-color: #F5F5F5;
+    background-color: #F5F5F5; /* this is whitesmoke */
     opacity: 0.6;
 }
 
-.players {
+.player-window {
     border: 2px solid;
+}
+
+.score-container {
+    border: 1px solid;
 }

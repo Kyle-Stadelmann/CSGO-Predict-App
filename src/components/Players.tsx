@@ -5,13 +5,15 @@ import { USER_SESSION_STORAGE_KEY } from './Pages/lib/user-util';
 import Player from './Player'
 
 const Players = () => {
+    const [ league, setLeague ] = useState({} as League);
     const [ userScores, setUserScores ] = useState({} as Map<string, number>);
 
 	useEffect(() => {
         async function fetchPlayers() {
             try {
-                const league = await getLeagueById(DEFAULT_LEAGUE_ID);
-                setUserScores(league.userScores);
+                const initLeague = await getLeagueById(DEFAULT_LEAGUE_ID);
+                setUserScores(initLeague.userScores);
+                setLeague(initLeague);
             } catch (e) {
                 // To have loaded this component, the user must have already authenticated with the backend.
                 // This error typically occurs when the authed session is lost in the backend for whatever reason.
@@ -37,7 +39,7 @@ const Players = () => {
         scores.sort(function(user1, user2){return user1.score < user2.score ? 1 : -1});
         
 		return (
-			<div className="players">
+			<div className="player-window">
                 {scores.map((m) => createPlayerElement(m.userId, m.score))}
 			</div>
 		);
@@ -45,11 +47,11 @@ const Players = () => {
 
     function createPlayerElement(player: string, score: number): JSX.Element {
 		return (
-			<Player player={player} score={score} />
+			<Player player={player} score={score} league={league} />
 		);
 	}
 
-	return <div className="match-window">{createPlayersElement()}</div>;
+	return createPlayersElement();
 };
 
 export default Players

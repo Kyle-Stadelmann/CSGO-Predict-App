@@ -25,7 +25,7 @@ const Matches = ({ matches, setMatches, picks, setPicks }: MatchesProps) => {
 
 	function createMatchesElement(): JSX.Element {
 		return (
-			<div className="matches">
+			<div className="match-window">
 				{/* seems like this line throws a warning, duplicate keys? */}
 				{matches.map((m) => createMatchElement(m))}
 			</div>
@@ -41,7 +41,9 @@ const Matches = ({ matches, setMatches, picks, setPicks }: MatchesProps) => {
 		);
 	}
 
-	return <div className="match-window">{createMatchesElement()}</div>;
+    // this was returning a div with createMatchesElement inside, but seemed unnecessary
+    // if that level of control is needed feel free to add it back
+	return createMatchesElement();
 };
 
 type MatchesProps = {
