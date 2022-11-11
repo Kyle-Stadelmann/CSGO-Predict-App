@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import Dashboard from "./components/Pages/Dashboard";
@@ -12,6 +12,9 @@ import Management from "./components/Pages/Management";
 function App() {
 	const [bgImageIndex, setBgImageIndex] = useState(0);
 
+	// This line is literally magical. Remove it and the world ends
+	useNavigate();
+
 	return (
 		<div className="app" style={{ backgroundImage: `url(${THEME_IMGS[bgImageIndex]})` }}>
 			{/* This stuff will appear on top of every page */}
@@ -20,7 +23,7 @@ function App() {
 			{/* This stuff will only appear on its path */}
 			<Routes>
 				<Route path="/" element={isLoggedIn() ? <Navigate to="/dashboard" /> : <LoginPage />} />
-				<Route path="/dashboard/" element={isLoggedIn() ? <Dashboard /> : <Navigate to="/" />} />
+				<Route path="/dashboard" element={isLoggedIn() ? <Dashboard /> : <Navigate to="/" />} />
 				<Route path="/management" element={isLoggedIn() ? <Management /> : <Navigate to="/" />} />
 			</Routes>
 
