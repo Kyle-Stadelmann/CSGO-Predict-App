@@ -1,10 +1,5 @@
 # Installing 
-### When npm installing, must use `--legacy-peer-deps` due to react dependencies not updating to react 18 yet. 
-
-## CSGO-Prediction-Lib Dependency
-This project uses a custom API with a private [library](https://github.com/Kyle-Stadelmann/CSGO-Prediction-API).
-
-Please follow installation instructions found [here](https://github.com/Kyle-Stadelmann/CSGO-Prediction-API/tree/main#readme).
+### When npm installing, must use `--legacy-peer-deps` due to react dependencies not updating to react 18 yet. (This is done by default for this project as per the .npmrc)
 
 # Getting Started with Create React App
 
