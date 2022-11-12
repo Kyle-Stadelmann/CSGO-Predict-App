@@ -1,5 +1,5 @@
 # Installing 
-### When npm installing, must use `--legacy-peer-deps` due to react dependencies not updating to react 18 yet. (This is done by default for this project as per the .npmrc)
+### When npm installing, must use `--legacy-peer-deps` due to react dependencies not updating to react 18 yet.
 
 # Getting Started with Create React App
 
