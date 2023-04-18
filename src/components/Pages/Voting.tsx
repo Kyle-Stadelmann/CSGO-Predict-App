@@ -1,4 +1,3 @@
-// TODO: load all matches where both teams exist? update whenever a stage ends?
 import { useEffect, useState } from "react";
 import { getStoredUser } from "../../lib/user-util";
 import Matches from "../Matches";
@@ -19,7 +18,7 @@ export interface MatchPicks {
 
 const Voting = () => {
 	// this will be necessary once we have more than one day
-	const [currentDay, setDay] = useState(1);
+	//const [currentDay, setDay] = useState(1);
 	const [matches, setMatches] = useState([] as ApiMatch[]);
 	const [picks, setPicks] = useState({} as MatchPicks);
 	const [predsSubmittedStr, setPredsSubmittedStr] = useState("");

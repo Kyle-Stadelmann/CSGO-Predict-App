@@ -9,7 +9,7 @@ const Matches = ({ matches, setMatches, picks, setPicks }: MatchesProps) => {
 	useEffect(() => {
 		async function fetchMatches() {
 			try {
-				setMatches(await getCurrentDayMatches(DEFAULT_LEAGUE_ID));
+				//setMatches(await getCurrentDayMatches(DEFAULT_LEAGUE_ID));
 			} catch (e) {
 				// To have loaded this component, the user must have already authenticated with the backend.
 				// This error typically occurs when the authed session is lost in the backend for whatever reason.

@@ -1,8 +1,11 @@
 import { League } from "csgo-predict-api";
+import { useEffect, useState } from "react";
 import Score from "./Score";
+import getDayScore from "./Players"
 
 type PlayerProps = {
 	player: string;
+    day: number;
 	score: number;
 	league: League;
 };
@@ -11,8 +14,13 @@ type PlayerProps = {
 // (assuming we add profiles)
 // TODO: make player the google User object (or w/e contains the relevant info)
 //       rather than string of userId
-const Player = ({ player, score, league }: PlayerProps) => {
-	const userDayScore = league.daysMap.get(8)?.userScores.get(player)?.dayScore;
+const Player = ({ player, day, score, league }: PlayerProps) => {
+	const [userDayScore, setUserDayScore] = 
+        useState(league.daysMap.get(day)?.userScores.get(player)?.dayScore);
+
+    useEffect(() => {
+        setUserDayScore(league.daysMap.get(day)?.userScores.get(player)?.dayScore);
+    }, [day, league.daysMap, player]);
 
 	return (
 		<div className="player">
@@ -20,7 +28,7 @@ const Player = ({ player, score, league }: PlayerProps) => {
 			&nbsp;
 			{`Player: ${player}`}
 			&nbsp;
-			<Score userScore={score} totalScore={NaN} userDayScore={userDayScore ?? NaN} totalDayScore={NaN} />
+			<Score day={day} userScore={score} totalScore={NaN} userDayScore={userDayScore ?? NaN} totalDayScore={NaN} />
 		</div>
 	);
 };
