@@ -1,6 +1,3 @@
-# Data Source
-Liquipedia (https://liquipedia.net/counterstrike/Main_Page)
-
 # Installing 
 ### When npm installing, must use `--legacy-peer-deps` due to react dependencies not updating to react 18 yet.
 
