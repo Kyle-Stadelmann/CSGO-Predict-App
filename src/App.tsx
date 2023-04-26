@@ -8,6 +8,7 @@ import { isLoggedIn } from "./lib/user-util";
 import ThemeButton from "./components/ThemeButton";
 import { THEME_IMGS } from "./constant";
 import Management from "./components/Pages/Management";
+import TopEight from "./components/Pages/TopEight";
 
 function App() {
 	const [bgImageIndex, setBgImageIndex] = useState(0);

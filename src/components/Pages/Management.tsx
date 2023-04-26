@@ -5,13 +5,17 @@
 import { getLeagueById, League } from "csgo-predict-api";
 import { useEffect, useState } from "react";
 import Tournament from "./Tournament";
-import Dropdown from "react-dropdown";
-import "react-dropdown/style.css";
 import { DEFAULT_LEAGUE_ID } from "../../constant";
 import { USER_SESSION_STORAGE_KEY } from "../../lib/user-util";
+import { ToggleButton } from "@mui/material";
 
 const Management = () => {
-    const [league, setLeague] = useState({} as League);
+    const [ league, setLeague ] = useState({} as League);
+	const [ topEightBool, setTopEightBool ] = useState(false);
+	
+	const handlePress = () => {
+		setTopEightBool(toggleTopEight(topEightBool));
+	}
 
     useEffect(() => {
         async function getLeague() {
@@ -27,14 +31,37 @@ const Management = () => {
         getLeague();
     }, []);
 
-	return (league.daysMap ?
+	if (!league.daysMap) {
+		return <div>Loading...</div>;
+	}
+
+	// styling this ToggleButton is a whole adventure on its own, leaving for now
+	return (
 		<div className="management">
 			<h1>Management Page</h1>
-            {/* <Dropdown options={["hi", "hi2"]} placeholder={"Tournament selector"} /> */}
-			<Tournament league={league} />
+			{/* tournament selector goes here */}
+			<ToggleButton
+				className="top-eight-toggle-button"
+				sx={{
+					"& .MuiTouchRipple-root": {
+						backgroundColor: "#f5f5f5",
+						opacity: 0.6,
+					},
+					color: "#FFFFFF",
+				}}
+				value="Top Eight"
+				selected={topEightBool}
+				onChange={handlePress}
+			>
+				Toggle Top Eight
+			</ToggleButton>
+			<Tournament league={league} topEightBool={topEightBool} />
 		</div>
-        : <div>Loading...</div>
 	);
 };
+
+function toggleTopEight(topEightBool: boolean) {
+	return !topEightBool;
+}
 
 export default Management;

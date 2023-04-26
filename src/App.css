@@ -129,3 +129,8 @@
 .score-container {
 	border: 1px solid;
 }
+
+.leaderboard-day-select {
+	background-color: #f5f5f5; /* this is whitesmoke */
+	opacity: 0.6;
+}
