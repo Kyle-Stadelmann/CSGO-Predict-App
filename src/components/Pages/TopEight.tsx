@@ -7,13 +7,20 @@ import { League } from "csgo-predict-api";
 import { Link } from "react-router-dom";
 import TopEightPicks from "../TopEightPicks";
 import TopEightList from "../TopEightList";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const TopEight = ({league}: TopEightProps) => {
 	return (
 		<div className="top-eight-page">
 			this is the top eight page for the league with Tournament ID {`${league.tournamentId}`}
-            <TopEightPicks league={league} />
-            <TopEightList />
+            <br />
+            <div className="top-eight">
+                <DndProvider backend={HTML5Backend}>
+                    <TopEightPicks league={league} />
+                    <TopEightList />
+                </DndProvider>
+            </div>
 		</div>
 	);
 };

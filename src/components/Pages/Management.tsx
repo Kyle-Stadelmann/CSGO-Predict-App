@@ -12,6 +12,8 @@ import { ToggleButton } from "@mui/material";
 const Management = () => {
     const [ league, setLeague ] = useState({} as League);
 	const [ topEightBool, setTopEightBool ] = useState(false);
+    // this will be dynamically grabbed once the API is capable
+    const isMajor = true;
 	
 	const handlePress = () => {
 		setTopEightBool(toggleTopEight(topEightBool));
@@ -36,28 +38,39 @@ const Management = () => {
 	}
 
 	// styling this ToggleButton is a whole adventure on its own, leaving for now
-	return (
-		<div className="management">
-			<h1>Management Page</h1>
-			{/* tournament selector goes here */}
-			<ToggleButton
-				className="top-eight-toggle-button"
-				sx={{
-					"& .MuiTouchRipple-root": {
-						backgroundColor: "#f5f5f5",
-						opacity: 0.6,
-					},
-					color: "#FFFFFF",
-				}}
-				value="Top Eight"
-				selected={topEightBool}
-				onChange={handlePress}
-			>
-				Toggle Top Eight
-			</ToggleButton>
-			<Tournament league={league} topEightBool={topEightBool} />
-		</div>
-	);
+    // ToggleButton (top eight toggle) only renders if league is a major
+    if (isMajor) {
+        return (
+            <div className="management">
+                <h1>Management Page</h1>
+                {/* tournament selector goes here */}
+                <ToggleButton
+                    className="top-eight-toggle-button"
+                    sx={{
+                        "& .MuiTouchRipple-root": {
+                            backgroundColor: "#f5f5f5",
+                            opacity: 0.6,
+                        },
+                        color: "#FFFFFF",
+                    }}
+                    value="Top Eight"
+                    selected={topEightBool}
+                    onChange={handlePress}
+                >
+                    Toggle Top Eight
+                </ToggleButton>
+                <Tournament league={league} topEightBool={topEightBool} />
+            </div>
+        );
+    } else {
+        return (
+            <div className="management">
+                <h1>Management Page</h1>
+                {/* tournament selector goes here */}
+                <Tournament league={league} topEightBool={topEightBool} />
+            </div>
+        );
+    }
 };
 
 function toggleTopEight(topEightBool: boolean) {

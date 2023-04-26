@@ -8,9 +8,9 @@ import { isLoggedIn } from "./lib/user-util";
 import ThemeButton from "./components/ThemeButton";
 import { THEME_IMGS } from "./constant";
 import Management from "./components/Pages/Management";
-import TopEight from "./components/Pages/TopEight";
 
 function App() {
+    // initialize this as the user's preferred bg image once that's in the db
 	const [bgImageIndex, setBgImageIndex] = useState(0);
 
 	// This line is literally magical. Remove it and the world ends
