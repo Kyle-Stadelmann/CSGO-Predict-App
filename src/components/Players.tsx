@@ -4,8 +4,11 @@ import { DEFAULT_LEAGUE_ID } from "../constant";
 import { USER_SESSION_STORAGE_KEY } from "../lib/user-util";
 import Player from "./Player";
 
+// TODO: this window needs to be contained and have a scroll bar
+// so it doesn't stretch past the window/has constant size
 const Players = ({league, day}: PlayersProps) => {
 	const [userScores, setUserScores] = useState({} as Map<string, number>);
+
 
 	useEffect(() => {
 		async function fetchPlayers() {
@@ -21,7 +24,7 @@ const Players = ({league, day}: PlayersProps) => {
 	}, [league.userScores]);
 
 	/*
-	// to be used with day score sort if we want to
+	// sort by day score helper
 	function getDayScore(userId: string): number {
 		return league.daysMap.get(day)?.userScores.get(userId)?.dayScore ?? 0;
 	}
@@ -29,14 +32,13 @@ const Players = ({league, day}: PlayersProps) => {
 
 	function createPlayersElement(): JSX.Element {
 		const scores = [] as { userId: string; score: number }[];
-		try {
+
+		if (userScores.size > 0) {
 			userScores.forEach((score, userId) => {
 				scores.push({ userId, score });
 			});
-		} catch (e) {
-			// on refresh this runs before useEffect, how to initialize?
-			console.log("userScores isn't initialized yet");
 		}
+
 		/*
 		// sort by day score
 		scores.sort(function (user1, user2) {

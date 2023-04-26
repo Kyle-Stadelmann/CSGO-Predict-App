@@ -15,11 +15,11 @@ type PlayerProps = {
 // TODO: make player the google User object (or w/e contains the relevant info)
 //       rather than string of userId
 const Player = ({ player, day, score, league }: PlayerProps) => {
-	const [userDayScore, setUserDayScore] = 
-        useState(league.daysMap.get(day)?.userScores.get(player)?.dayScore);
+	const [userDay, setUserDay] = 
+        useState(league.daysMap.get(day)?.userScores.get(player));
 
     useEffect(() => {
-        setUserDayScore(league.daysMap.get(day)?.userScores.get(player)?.dayScore);
+        setUserDay(league.daysMap.get(day)?.userScores.get(player));
     }, [day, league.daysMap, player]);
 
 	return (
@@ -28,7 +28,7 @@ const Player = ({ player, day, score, league }: PlayerProps) => {
 			&nbsp;
 			{`Player: ${player}`}
 			&nbsp;
-			<Score day={day} userScore={score} totalScore={NaN} userDayScore={userDayScore ?? NaN} totalDayScore={NaN} />
+			<Score day={day} userScore={score} totalScore={NaN} userDayScore={userDay?.dayScore ?? NaN} totalDayScore={NaN} />
 		</div>
 	);
 };

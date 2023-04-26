@@ -129,3 +129,59 @@
 .score-container {
 	border: 1px solid;
 }
+
+.leaderboard-day-select {
+	background-color: #f5f5f5;
+	opacity: 0.6;
+}
+
+.top-eight-page {
+    margin-left: 30%;
+}
+
+.top-eight {
+    display: flex;
+}
+
+.top-eight-picks-wrapper {
+    background-color: #fff00f;
+    display: inline-block;
+    padding: 5px;
+}
+
+.top-eight-picks {
+    border: 2px solid;
+}
+
+.top-eight-list-wrapper {
+    background-color: #f00fff;
+    display: inline-block;
+    padding: 5px;
+}
+
+.top-eight-list {
+    border: 2px solid;
+}
+
+.top-eight-team-bucket {
+    border: 5px solid;
+    width: 350px;
+    height: 45px;
+}
+
+.top-eight-team {
+    background-color: #f5f5f5;
+	/*opacity: 0.6;*/
+    display: inline-block;
+    border: 2px solid;
+    width: 400px;
+    height: 50px;
+    font-size: 24px;
+    line-height: 50px;
+    text-align: left;
+}
+
+.top-eight-team-logo {
+    /* fuck off */
+    width: 10%;
+}
