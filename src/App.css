@@ -150,6 +150,7 @@
 }
 
 .top-eight-picks {
+    display: grid;
     border: 2px solid;
 }
 
@@ -160,6 +161,7 @@
 }
 
 .top-eight-list {
+    display: grid;
     border: 2px solid;
 }
 
@@ -167,6 +169,11 @@
     border: 5px solid;
     width: 350px;
     height: 45px;
+}
+
+.list {
+    border: 0px;
+    opacity: 0.5;
 }
 
 .top-eight-team {

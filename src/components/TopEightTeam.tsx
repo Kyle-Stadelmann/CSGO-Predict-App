@@ -2,23 +2,25 @@ import { Team } from 'csgo-predict-api';
 import React from 'react';
 import { useDrag } from 'react-dnd';
 
-const TopEightTeam = ({ teamInfo, setTeamInBucket }: TopEightTeamProps) => {
-    const [ { isDragging }, drag, dragPreview ] = useDrag(() => ({
+const TopEightTeam = ({ teamInfo }: TopEightTeamProps) => {
+    const [{ isDragging }, drag] = useDrag(() => ({
         type: 'TEAM',
-        item: { teamInfo },
         collect: (monitor) => ({
-            isDragging: monitor.isDragging()
+            isDragging: !!monitor.isDragging()
         }),
-        end: () => setTeamInBucket(undefined)
-    }));
-    
+        item: teamInfo
+    }))
+
     return (
-        <div
+        <div 
             className="top-eight-team"
-            ref={dragPreview}
-            style={{ opacity: isDragging ? 0.5 : 1 }}
+            ref={drag}
+            style={{
+                opacity: isDragging ? 0.5 : 1,
+                cursor: 'move',
+            }}
         >
-            <div role="Handle" ref={drag}>
+            <div className="top-eight-team-info">
                 {`#${teamInfo.rank}`}
                 <img
                     className="top-eight-team-logo"
@@ -27,12 +29,11 @@ const TopEightTeam = ({ teamInfo, setTeamInBucket }: TopEightTeamProps) => {
                 {`${teamInfo.name}`}
             </div>
         </div>
-    );
+    )
 }
 
 type TopEightTeamProps = {
     teamInfo: Team;
-    setTeamInBucket: React.Dispatch<React.SetStateAction<Team | undefined>>;
 }
 
 export default TopEightTeam;
