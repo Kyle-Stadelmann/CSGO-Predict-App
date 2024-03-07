@@ -90,6 +90,8 @@ const TopEight = ({league}: TopEightProps) => {
 	);
 };
 
+// 'Lock in Picks!' button on this page that will call setPlayoffPredictions API wrapper
+
 type TopEightProps = {
     league: League;
 }
