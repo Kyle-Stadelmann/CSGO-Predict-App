@@ -3,7 +3,6 @@
 // user picks the 8 teams they think are gonna be in top 8 (champion stage)
 // user may not (re)submit this once the first match of the tournament has started
 
-import { Id, League, Team } from "csgo-predict-api";
 import TopEightPicks from "../TopEightPicks";
 import TopEightList from "../TopEightList";
 import { DndProvider } from "react-dnd";
@@ -12,6 +11,9 @@ import { useEffect, useState } from "react";
 import TopEightTeam from "../TopEightTeam";
 import TopEightTeamBucket from "../TopEightTeamBucket";
 import {
+    League,
+    Team,
+    PlayoffPredictions,
     getLeagueTeams,
     getPlayoffPredictions as getPlayoffPreds,
     submitPlayoffPredictions as submitPlayoffPreds,
@@ -26,12 +28,12 @@ const TopEight = ({league}: TopEightProps) => {
         try {
             const userId = getStoredUser()?.id;
             if (!userId) return;
-            const playoffPreds = getPlayoffPreds(userId, league.id);
-            const teams = getLeagueTeams(league.id);
+            const playoffPreds = await getPlayoffPreds(+userId, league.id);
+            const teams = (await getLeagueTeams(league.id)).sort((a, b) => a.rank! - b.rank!);
 
             const pickedTeams = teams.filter((team: Team) => {
                 return playoffPreds.teamIds.includes(team.id);
-            });
+            })
 
             const data = [[...pickedTeams], [...teams]];
             setTopEightData(data);
@@ -68,22 +70,43 @@ const TopEight = ({league}: TopEightProps) => {
         const topEightListBuckets: JSX.Element[] = [];
 
         data[0].forEach((team: Team, index) => {
-            topEightPicksBuckets.push(<TopEightTeamBucket x={0} y={index} team={<TopEightTeam teamInfo={team} />} moveTeam={moveTeam} />)
+            topEightPicksBuckets.push(
+                <TopEightTeamBucket
+                    x={0}
+                    y={index}
+                    team={<TopEightTeam teamInfo={team} />}
+                    moveTeam={moveTeam}
+                />
+            )
         });
+        // teams that are in Picks should initialize grayed out with team info but no TopEightTeam
         data[1].forEach((team: Team, index) => {
-            topEightListBuckets.push(<TopEightTeamBucket x={1} y={index} team={<TopEightTeam teamInfo={team} />} moveTeam={moveTeam} />)
+            topEightListBuckets.push(
+                <TopEightTeamBucket
+                    x={1}
+                    y={index}
+                    team={<TopEightTeam teamInfo={team} />}
+                    moveTeam={moveTeam}
+                />
+            )
         });
 
         return [topEightPicksBuckets, topEightListBuckets];
     }
     
+    // there might be a way to only re-render changed buckets, idk enough React to know how to do that though
     useEffect (() => {
         setTopEightBuckets(constructBuckets(topEightData));
     }, [topEightData]);
 
     // TODO: 'Lock in Picks!' button on this page that will call setPlayoffPredictions API wrapper
-    async function submitPlayoffPredictions(teams: Team[]) {
-        const playoffPreds = topEightData[0];
+    async function submitPlayoffPredictions(predictedTeams: Team[]) {
+        const playoffPreds: PlayoffPredictions = {
+            userId: getStoredUser()!.id,
+            leagueId: league.id,
+            teamIds: predictedTeams.map((team) => team.id),
+            date: new Date(),
+        };
         try {
             await submitPlayoffPreds(playoffPreds);
         } catch (e) {

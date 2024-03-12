@@ -42,6 +42,11 @@ const TopEightTeamBucket = ({ x, y, team, moveTeam }: TopEightTeamBucketProps) =
     //   if !listBucket, render empty picks bucket
     if (team.props.teamInfo.id !== -1) return team;
 
+    // TODO: split this into two different bucket components
+    // PickBucket will be empty with no team
+    // ListBucket will be empty with faded team info
+    // 
+    // grab ListBucket team data with y value
     return (x === 1 ? 
         <div
             className="top-eight-team-bucket list"
