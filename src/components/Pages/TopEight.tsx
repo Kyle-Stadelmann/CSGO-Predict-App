@@ -3,7 +3,7 @@
 // user picks the 8 teams they think are gonna be in top 8 (champion stage)
 // user may not (re)submit this once the first match of the tournament has started
 
-import { League, Team } from "csgo-predict-api";
+import { Id, League, Team } from "csgo-predict-api";
 import TopEightPicks from "../TopEightPicks";
 import TopEightList from "../TopEightList";
 import { DndProvider } from "react-dnd";
@@ -11,34 +11,39 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { useEffect, useState } from "react";
 import TopEightTeam from "../TopEightTeam";
 import TopEightTeamBucket from "../TopEightTeamBucket";
+import {
+    getLeagueTeams,
+    getPlayoffPredictions as getPlayoffPreds,
+    submitPlayoffPredictions as submitPlayoffPreds,
+} from "csgo-predict-api";
+import { getStoredUser } from "../../lib/user-util";
 
 const TopEight = ({league}: TopEightProps) => {
-    let testTeams: Team[] = [{
-        id: 1,
-        name: "Heroic",
-        logo_url: "https://upload.wikimedia.org/wikipedia/commons/8/8f/Heroic_2023_logo.png",
-        country: {
-            name: "Denmark",
-            code: "DN"
-        },
-        rank: 1,
-    },
-    {
-        id: 2,
-        name: "G2",
-        logo_url: "https://upload.wikimedia.org/wikipedia/en/thumb/1/12/Esports_organization_G2_Esports_logo.svg/1200px-Esports_organization_G2_Esports_logo.svg.png",
-        country: {
-            name: "International",
-            code: "INT"
-        },
-        rank: 2
-    }];
-    
-    const topEightPicks: Team[] = new Array(8).fill(0).map(() => ({id: -1} as Team));
-    // the below information will be grabbed from backend
-    const topEightTeams: Team[] = testTeams;
-    const [ topEightData, setTopEightData ] = useState([topEightPicks, topEightTeams]);
+    const [ topEightData, setTopEightData ] = useState([[] as Team[], [] as Team[]]);
     const [ topEightBuckets, setTopEightBuckets ] = useState([] as JSX.Element[][]);
+
+    async function initTeams() {
+        try {
+            const userId = getStoredUser()?.id;
+            if (!userId) return;
+            const playoffPreds = getPlayoffPreds(userId, league.id);
+            const teams = getLeagueTeams(league.id);
+
+            const pickedTeams = teams.filter((team: Team) => {
+                return playoffPreds.teamIds.includes(team.id);
+            });
+
+            const data = [[...pickedTeams], [...teams]];
+            setTopEightData(data);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    // this might call initTeams() every time a team is moved?
+    useEffect(() => {
+        initTeams();
+    }, []);
 
     const moveTeam = (x: number, y: number, id: number) => {
         const tempData = topEightData.slice();
@@ -76,6 +81,16 @@ const TopEight = ({league}: TopEightProps) => {
         setTopEightBuckets(constructBuckets(topEightData));
     }, [topEightData]);
 
+    // TODO: 'Lock in Picks!' button on this page that will call setPlayoffPredictions API wrapper
+    async function submitPlayoffPredictions(teams: Team[]) {
+        const playoffPreds = topEightData[0];
+        try {
+            await submitPlayoffPreds(playoffPreds);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
 	return (
 		<div className="top-eight-page">
 			this is the top eight page for the league with Tournament ID {`${league.tournamentId}`}
@@ -89,8 +104,6 @@ const TopEight = ({league}: TopEightProps) => {
 		</div>
 	);
 };
-
-// 'Lock in Picks!' button on this page that will call setPlayoffPredictions API wrapper
 
 type TopEightProps = {
     league: League;
