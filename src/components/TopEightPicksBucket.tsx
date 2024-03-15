@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import TopEightTeam from './TopEightTeam';
 
-// if you make the buckets and teams the same size then you can just show one or the other
+// TODO: css needs to be wildly improved
 const TopEightPicksBucket = ({ x, y, team, teamInfo, moveTeam }: TopEightPicksBucketProps) => {
     const [{ isOver }, drop] = useDrop(() => ({
         accept: 'TEAM',
@@ -15,27 +15,26 @@ const TopEightPicksBucket = ({ x, y, team, teamInfo, moveTeam }: TopEightPicksBu
         }),
     }), [x, y])
 
-    // if team, return team
-    // if no team
-    //   if listBucket, render team with less opacity
-    //   if !listBucket, render empty picks bucket
-    if (team.props.teamInfo.id !== -1) return team;
+    // Render empty PicksBucket if no team or dummy team
+    if (!team || team.props.teamInfo.id === -1) {
+        return (
+            <div
+                className="top-eight-bucket"
+                ref={drop}
+            >
+                TEAM BUCKET
+                {` no team lool`}
+            </div>
+        );
+    }
 
-    // These buckets should be (empty yet full size) when no teamInfo
-    return (x === 1 ? 
+    // Render PicksBucket with team
+    return (
         <div
             className="top-eight-bucket picks"
             ref={drop}
         >
-            <TopEightTeam teamInfo={teamInfo} />
-        </div>
-        :
-        <div
-            className="top-eight-bucket"
-            ref={drop}
-        >
-            TEAM BUCKET
-            {` no team lool`}
+            {team}
         </div>
     );
 }

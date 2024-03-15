@@ -53,7 +53,7 @@ const Players = ({league, day}: PlayersProps) => {
 	}
 
 	function createPlayerElement(player: string, score: number): JSX.Element {
-		return <Player player={player} day={day} score={score} league={league} />;
+		return <Player key={player} player={player} day={day} score={score} league={league} />;
 	}
 
 	return createPlayersElement();

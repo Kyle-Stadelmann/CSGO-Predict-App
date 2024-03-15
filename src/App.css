@@ -151,7 +151,7 @@
 
 .top-eight-picks {
     display: grid;
-    border: 2px solid;
+    border: 1px solid;
 }
 
 .top-eight-list-wrapper {
@@ -166,12 +166,12 @@
 }
 
 .top-eight-bucket {
-    border: 5px solid;
+    border: 3px solid;
     width: 350px;
     height: 45px;
 }
 
-.list {
+.dummy {
     border: 0px;
     opacity: 0.5;
 }

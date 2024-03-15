@@ -20,39 +20,77 @@ import {
     submitPlayoffPredictions as submitPlayoffPreds,
 } from "csgo-predict-api";
 import { getStoredUser } from "../../lib/user-util";
+import { Button } from "@mui/material";
 
 const TopEight = ({league}: TopEightProps) => {
     const [ topEightData, setTopEightData ] = useState([[] as Team[], [] as Team[]]);
     const [ topEightBuckets, setTopEightBuckets ] = useState([] as JSX.Element[][]);
 
     async function initTeams() {
+        const userId = getStoredUser()?.id;
+        if (!userId) return;
+
+        let playoffPreds: PlayoffPredictions | undefined;
         try {
-            const userId = getStoredUser()?.id;
-            if (!userId) return;
-            const playoffPreds = await getPlayoffPreds(+userId, league.id);
+            playoffPreds = await getPlayoffPreds(userId, league.id);
+        } catch (e) {
+            // no point in logging that user has no predictions imo
+        }
+
+        try {
+            // TODO: add a.rank, b.rank existence checks
             const teams = (await getLeagueTeams(league.id)).sort((a, b) => a.rank! - b.rank!);
-
             const pickedTeams = teams.filter((team: Team) => {
-                return playoffPreds.teamIds.includes(team.id);
-            })
+                return playoffPreds ? playoffPreds.teamIds.includes(team.id) : false;
+            });
 
-            // keep pickedTeams at length 8 for 8 buckets
-            for (let i = 7-pickedTeams.length; i < 8; i++) {
-                // this needs to push empty Team or smth?
-                //pickedTeams.push()
-            }
+            const nonPickedTeams = replacePickedTeams(teams, pickedTeams);
+            padPickedTeams(pickedTeams);
 
-            const data = [[...pickedTeams], [...teams]];
+            const data = [[...pickedTeams], [...nonPickedTeams]];
             setTopEightData(data);
         } catch (e) {
             console.error(e);
         }
     }
 
-    // this might call initTeams() every time a team is moved?
     useEffect(() => {
         initTeams();
     }, []);
+    
+    const constructBuckets = (data: Team[][]): JSX.Element[][] => {
+        const topEightPicksBuckets = data[0].map((team: Team, index) => {
+            return (
+                <TopEightTeamPicksBucket
+                    key={index}
+                    x={0}
+                    y={index}
+                    team={<TopEightTeam teamInfo={team} />}
+                    teamInfo={team}
+                    moveTeam={moveTeam}
+                />
+            )
+        });
+        const topEightListBuckets = data[1].map((team: Team, index) => {
+            return (
+                <TopEightTeamListBucket
+                    key={index}
+                    x={1}
+                    y={index}
+                    team={<TopEightTeam teamInfo={team} />}
+                    teamInfo={team}
+                    moveTeam={moveTeam}
+                />
+            )
+        });
+
+        return [topEightPicksBuckets, topEightListBuckets];
+    }
+    
+    // there might be a way to only re-render changed buckets, idk enough React to know how to do that though
+    useEffect (() => {
+        setTopEightBuckets(constructBuckets(topEightData));
+    }, [topEightData]);
 
     const moveTeam = (x: number, y: number, id: number) => {
         const tempData = topEightData.slice();
@@ -72,49 +110,40 @@ const TopEight = ({league}: TopEightProps) => {
         setTopEightData(tempData);
     }
 
-    const constructBuckets = (data: Team[][]): JSX.Element[][] => {
-        // there will likely be an issue to be resolved generating this with empties at the end
-        // since the last will be empties, we need to be able to initialize buckets without a TopEightTeam
-        const topEightPicksBuckets = data[0].map((team: Team, index) => {
-            return (
-                <TopEightTeamPicksBucket
-                    x={0}
-                    y={index}
-                    team={<TopEightTeam teamInfo={team} />}
-                    teamInfo={team}
-                    moveTeam={moveTeam}
-                />
-            )
+    function replacePickedTeams(teams: Team[], pickedTeams: Team[]) {
+        return teams.map((team: Team) => {
+            if (pickedTeams.includes(team)) {
+                const dummyTeam: Team = {
+                    id: -1,
+                    name: "Dummy Team",
+                    country: {name: "Dummiya", code: "DY"},
+                    rank: -1
+                };
+                return dummyTeam;
+            } else {
+                return team;
+            }
         });
-        // i want this to put empty buckets with team info if the team is in picks
-        // and i want the empty buckets to render faded team info with no drag
-        // but the current structure of the buckets doesn't allow for that
-        const topEightListBuckets = data[1].map((team: Team, index) => {
-            return (
-                <TopEightTeamListBucket
-                    x={1}
-                    y={index}
-                    team={<TopEightTeam teamInfo={team} />}
-                    teamInfo = {team}
-                    moveTeam={moveTeam}
-                />
-            )
-        });
-
-        return [topEightPicksBuckets, topEightListBuckets];
     }
-    
-    // there might be a way to only re-render changed buckets, idk enough React to know how to do that though
-    useEffect (() => {
-        setTopEightBuckets(constructBuckets(topEightData));
-    }, [topEightData]);
 
-    // TODO: 'Lock in Picks!' button on this page that will call setPlayoffPredictions API wrapper
+    function padPickedTeams(pickedTeams: Team[]) {
+        for (let i = pickedTeams.length; i < 8; i++) {
+            const dummyTeam: Team = {
+                id: -1,
+                name: "Dummy Team",
+                country: {name: "Dummiya", code: "DY"},
+                rank: -1
+            };
+            pickedTeams.push(dummyTeam);
+        }
+    }
+
     async function submitPlayoffPredictions(predictedTeams: Team[]) {
+        const noDummyPreds = predictedTeams.filter((team) => team.id !== -1);
         const playoffPreds: PlayoffPredictions = {
             userId: getStoredUser()!.id,
             leagueId: league.id,
-            teamIds: predictedTeams.map((team) => team.id),
+            teamIds: noDummyPreds.map((team) => team.id),
             date: new Date(),
         };
         try {
@@ -133,6 +162,15 @@ const TopEight = ({league}: TopEightProps) => {
                     <TopEightPicks teams={topEightBuckets[0]} />
                     <TopEightList teams={topEightBuckets[1]} />
                 </DndProvider>
+            </div>
+            <div className="top-eight-submit-button">
+                <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => submitPlayoffPredictions(topEightData[0])}
+                >
+                    Submit Predictions!
+                </Button>
             </div>
 		</div>
 	);
