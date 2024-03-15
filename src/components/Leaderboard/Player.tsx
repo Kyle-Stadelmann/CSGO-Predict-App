@@ -1,11 +1,11 @@
 import { League } from "csgo-predict-api";
 import { useEffect, useState } from "react";
-import Score from "./Score";
-import getDayScore from "./Players"
+import Score from "../Score";
+import getDayScore from "./Players";
 
 type PlayerProps = {
 	player: string;
-    day: number;
+	day: number;
 	score: number;
 	league: League;
 };
@@ -15,12 +15,11 @@ type PlayerProps = {
 // TODO: make player the google User object (or w/e contains the relevant info)
 //       rather than string of userId
 const Player = ({ player, day, score, league }: PlayerProps) => {
-	const [userDay, setUserDay] = 
-        useState(league.daysMap.get(day)?.userScores.get(player));
+	const [userDay, setUserDay] = useState(league.daysMap.get(day)?.userScores.get(player));
 
-    useEffect(() => {
-        setUserDay(league.daysMap.get(day)?.userScores.get(player));
-    }, [day, league.daysMap, player]);
+	useEffect(() => {
+		setUserDay(league.daysMap.get(day)?.userScores.get(player));
+	}, [day, league.daysMap, player]);
 
 	return (
 		<div className="player">
@@ -28,7 +27,13 @@ const Player = ({ player, day, score, league }: PlayerProps) => {
 			&nbsp;
 			{`Player: ${player}`}
 			&nbsp;
-			<Score day={day} userScore={score} totalScore={NaN} userDayScore={userDay?.dayScore ?? NaN} totalDayScore={NaN} />
+			<Score
+				day={day}
+				userScore={score}
+				totalScore={NaN}
+				userDayScore={userDay?.dayScore ?? NaN}
+				totalDayScore={NaN}
+			/>
 		</div>
 	);
 };

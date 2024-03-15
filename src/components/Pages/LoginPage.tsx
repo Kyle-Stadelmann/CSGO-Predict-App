@@ -33,7 +33,7 @@ const LoginPage = () => {
 
 			document.getElementById("signin-btn")!.style.display = "none";
 			sessionStorage.setItem(USER_SESSION_STORAGE_KEY, JSON.stringify(user));
-			navigate("/dashboard", { replace: true });
+			navigate("/management", { replace: true });
 		}
 
 		google.accounts.id.initialize({

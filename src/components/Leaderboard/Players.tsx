@@ -1,14 +1,13 @@
 import { getLeagueById, League } from "csgo-predict-api";
 import { useEffect, useState } from "react";
-import { DEFAULT_LEAGUE_ID } from "../constant";
-import { USER_SESSION_STORAGE_KEY } from "../lib/user-util";
+import { DEFAULT_LEAGUE_ID } from "../../constant";
+import { USER_SESSION_STORAGE_KEY } from "../../lib/user-util";
 import Player from "./Player";
 
 // TODO: this window needs to be contained and have a scroll bar
 // so it doesn't stretch past the window/has constant size
-const Players = ({league, day}: PlayersProps) => {
+const Players = ({ league, day }: PlayersProps) => {
 	const [userScores, setUserScores] = useState({} as Map<string, number>);
-
 
 	useEffect(() => {
 		async function fetchPlayers() {
@@ -60,8 +59,8 @@ const Players = ({league, day}: PlayersProps) => {
 };
 
 type PlayersProps = {
-    league: League;
-    day: number;
-}
+	league: League;
+	day: number;
+};
 
 export default Players;
