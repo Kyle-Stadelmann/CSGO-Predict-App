@@ -3,7 +3,7 @@
 
 import React from 'react';
 import TopEightTeam from './TopEightTeam';
-import TopEightTeamBucket from './TopEightTeamBucket';
+import TopEightTeamBucket from './TopEightListBucket';
 import { Team } from 'csgo-predict-api';
 
 const TopEightList = ({ teams }: TopEightListProps) => {

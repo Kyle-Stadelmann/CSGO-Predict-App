@@ -9,7 +9,8 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useEffect, useState } from "react";
 import TopEightTeam from "../TopEightTeam";
-import TopEightTeamBucket from "../TopEightTeamBucket";
+import TopEightTeamPicksBucket from "../TopEightPicksBucket";
+import TopEightTeamListBucket from "../TopEightListBucket";
 import {
     League,
     Team,
@@ -34,6 +35,12 @@ const TopEight = ({league}: TopEightProps) => {
             const pickedTeams = teams.filter((team: Team) => {
                 return playoffPreds.teamIds.includes(team.id);
             })
+
+            // keep pickedTeams at length 8 for 8 buckets
+            for (let i = 7-pickedTeams.length; i < 8; i++) {
+                // this needs to push empty Team or smth?
+                //pickedTeams.push()
+            }
 
             const data = [[...pickedTeams], [...teams]];
             setTopEightData(data);
@@ -66,26 +73,29 @@ const TopEight = ({league}: TopEightProps) => {
     }
 
     const constructBuckets = (data: Team[][]): JSX.Element[][] => {
-        const topEightPicksBuckets: JSX.Element[] = [];
-        const topEightListBuckets: JSX.Element[] = [];
-
-        data[0].forEach((team: Team, index) => {
-            topEightPicksBuckets.push(
-                <TopEightTeamBucket
+        // there will likely be an issue to be resolved generating this with empties at the end
+        // since the last will be empties, we need to be able to initialize buckets without a TopEightTeam
+        const topEightPicksBuckets = data[0].map((team: Team, index) => {
+            return (
+                <TopEightTeamPicksBucket
                     x={0}
                     y={index}
                     team={<TopEightTeam teamInfo={team} />}
+                    teamInfo={team}
                     moveTeam={moveTeam}
                 />
             )
         });
-        // teams that are in Picks should initialize grayed out with team info but no TopEightTeam
-        data[1].forEach((team: Team, index) => {
-            topEightListBuckets.push(
-                <TopEightTeamBucket
+        // i want this to put empty buckets with team info if the team is in picks
+        // and i want the empty buckets to render faded team info with no drag
+        // but the current structure of the buckets doesn't allow for that
+        const topEightListBuckets = data[1].map((team: Team, index) => {
+            return (
+                <TopEightTeamListBucket
                     x={1}
                     y={index}
                     team={<TopEightTeam teamInfo={team} />}
+                    teamInfo = {team}
                     moveTeam={moveTeam}
                 />
             )

@@ -4,7 +4,7 @@
 import React from 'react';
 import { League } from 'csgo-predict-api';
 import { useDrop } from 'react-dnd';
-import TopEightTeamBucket from './TopEightTeamBucket';
+import TopEightTeamBucket from './TopEightListBucket';
 
 const TopEightPicks = ({ teams }: TopEightPicksProps) => {
     return (
