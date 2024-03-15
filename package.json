@@ -9,7 +9,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
-    "csgo-predict-api": "file:csgo-predict-api-1.0.2.tgz",
+    "csgo-predict-api": "^1.1.1",
     "google-auth-library": "^8.6.0",
     "jwt-decode": "^3.1.2",
     "prettier": "^2.6.2",
