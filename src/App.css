@@ -59,6 +59,7 @@
 	padding: 2px;
 	background-color: whitesmoke;
 	opacity: 0.6;
+	width: 100%;
 }
 
 .match-pic {
@@ -68,7 +69,7 @@
 	cursor: pointer;
 }
 
-.match-window {
+.match-list {
 	border: 2px solid;
 }
 
@@ -93,18 +94,12 @@
 }
 
 .voting-window {
-	margin: auto;
-	width: 40%;
 	padding: 40px;
-	text-align: center;
 	flex: 1;
 }
 
 .leaderboard-window {
-	margin: auto;
-	width: 40%;
 	padding: 40px;
-	text-align: center;
 	flex: 1;
 }
 

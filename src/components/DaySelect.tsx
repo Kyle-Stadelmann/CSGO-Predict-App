@@ -19,7 +19,9 @@ export default function DaySelect({ day, setDay, days, maxDay }: DaySelectProps)
 					MenuProps={{ PaperProps: { style: { maxHeight: 200 } } }}
 				>
 					{days.map((day) => (
-						<MenuItem value={day}>{day === maxDay ? "Current day" : `Day ${day}`}</MenuItem>
+						<MenuItem key={day} value={day}>
+							{day === maxDay ? "Current day" : `Day ${day}`}
+						</MenuItem>
 					))}
 				</Select>
 			</FormControl>

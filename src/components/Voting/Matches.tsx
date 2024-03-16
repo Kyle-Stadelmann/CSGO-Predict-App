@@ -1,15 +1,17 @@
 import { getCurrentDayMatches, Match as ApiMatch } from "csgo-predict-api";
 import { useEffect } from "react";
-import { DEFAULT_LEAGUE_ID } from "../constant";
+import { DEFAULT_LEAGUE_ID } from "../../constant";
 import Match from "./Match";
-import { USER_SESSION_STORAGE_KEY } from "../lib/user-util";
-import { MatchPicks } from "./Pages/Voting";
+import { USER_SESSION_STORAGE_KEY } from "../../lib/user-util";
+import { MatchPicks } from "../Pages/Voting";
+import List from "@mui/material/List";
+import { ListItem } from "@mui/material";
 
-const Matches = ({ matches, setMatches, picks, setPicks }: MatchesProps) => {
+export default function Matches({ matches, setMatches, picks, setPicks }: MatchesProps) {
 	useEffect(() => {
 		async function fetchMatches() {
 			try {
-				//setMatches(await getCurrentDayMatches(DEFAULT_LEAGUE_ID));
+				setMatches(await getCurrentDayMatches(DEFAULT_LEAGUE_ID));
 			} catch (e) {
 				// To have loaded this component, the user must have already authenticated with the backend.
 				// This error typically occurs when the authed session is lost in the backend for whatever reason.
@@ -24,19 +26,22 @@ const Matches = ({ matches, setMatches, picks, setPicks }: MatchesProps) => {
 
 	function createMatchesElement(): JSX.Element {
 		return (
-			<div className="match-window">
-				{/* seems like this line throws a warning, duplicate keys? */}
+			<List className="match-list" disablePadding>
 				{matches.map((m) => createMatchElement(m))}
-			</div>
+			</List>
 		);
 	}
 
 	function createMatchElement(match: ApiMatch): JSX.Element {
-		return <Match match={match} picks={picks} setPicks={setPicks} />;
+		return (
+			<ListItem key={match.id} disablePadding>
+				<Match match={match} picks={picks} setPicks={setPicks} />
+			</ListItem>
+		);
 	}
 
 	return createMatchesElement();
-};
+}
 
 type MatchesProps = {
 	matches: ApiMatch[];
@@ -44,5 +49,3 @@ type MatchesProps = {
 	picks: MatchPicks;
 	setPicks: Function;
 };
-
-export default Matches;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getStoredUser } from "../../lib/user-util";
-import Matches from "../Matches";
+import Matches from "../Voting/Matches";
 import {
 	DayPredictions,
 	Prediction,
@@ -8,17 +8,21 @@ import {
 	Match as ApiMatch,
 	Id,
 	getDayPredictions,
+	League,
 } from "csgo-predict-api";
 import { DEFAULT_LEAGUE_ID } from "../../constant";
+import DaySelect from "../DaySelect";
 
 // Match id -> Picked team Id
 export interface MatchPicks {
 	[match_id: Id]: Id;
 }
 
-const Voting = () => {
-	// this will be necessary once we have more than one day
-	//const [currentDay, setDay] = useState(1);
+export default function Voting({ league }: VotingProps) {
+	const days = [...league.daysMap.keys()].reverse();
+	const maxDay = Math.max(...days);
+	const [leaderboardDay, setLeaderboardDay] = useState(maxDay);
+
 	const [matches, setMatches] = useState([] as ApiMatch[]);
 	const [picks, setPicks] = useState({} as MatchPicks);
 	const [predsSubmittedStr, setPredsSubmittedStr] = useState("");
@@ -41,7 +45,7 @@ const Voting = () => {
 			await submitDayPredictions(dayPreds);
 			setPredsSubmittedStr("Successfully submitted predictions!");
 		} catch (e) {
-			setPredsSubmittedStr("Error submitting predictions. Perhaps the match has already started.");
+			setPredsSubmittedStr("Error submitting predictions. Perhaps a selected match has already started.");
 		}
 	}
 
@@ -82,9 +86,10 @@ const Voting = () => {
 
 	return (
 		<div className="voting-window">
-			<br />
-			<h2>Voting</h2>
-			{/* event=import */}
+			<div style={{ display: "flex", justifyContent: "space-between" }}>
+				<h1>Voting</h1>
+				<DaySelect day={leaderboardDay} setDay={setLeaderboardDay} days={days} maxDay={maxDay} />
+			</div>
 			<Matches matches={matches} setMatches={setMatches} picks={picks} setPicks={setPicks} />
 			<button type="button" className="submit-predictions-btn" onClick={submitPredictions}>
 				Submit Predictions!
@@ -92,6 +97,8 @@ const Voting = () => {
 			<h2>{predsSubmittedStr}</h2>
 		</div>
 	);
-};
+}
 
-export default Voting;
+type VotingProps = {
+	league: League;
+};

@@ -1,6 +1,6 @@
 // TODO: add a submitted status indicator at the right side
 import { Match as ApiMatch, Team as ApiTeam } from "csgo-predict-api";
-import { MatchPicks } from "./Pages/Voting";
+import { MatchPicks } from "../Pages/Voting";
 import Team from "./Team";
 
 type MatchProps = {
