@@ -95,6 +95,10 @@
 	scale: 1.7;
 }
 
+.submit-predictions-str {
+	padding-top: 20px;
+}
+
 .theme-btn {
 	position: absolute;
 	bottom: 0;

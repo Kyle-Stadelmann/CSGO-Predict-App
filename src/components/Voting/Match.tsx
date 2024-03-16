@@ -1,9 +1,9 @@
 // TODO: add a submitted status indicator at the right side
-import { Match as ApiMatch, Team as ApiTeam } from "csgo-predict-api";
+import { Match as ApiMatch, Team as ApiTeam, MatchResult as ApiMatchResult } from "csgo-predict-api";
 import { MatchPicks } from "../Pages/Voting";
 import SelectableTeam from "./SelectableTeam";
 
-export default function Match({ match, picks, setPicks }: MatchProps) {
+export default function Match({ match, picks, setPicks, isActiveVoting }: MatchProps) {
 	const team1 = match.team1;
 	const team2 = match.team2;
 	const pickedTeam = getPickedTeam();
@@ -21,6 +21,8 @@ export default function Match({ match, picks, setPicks }: MatchProps) {
 	}
 
 	function handleTeam1Picked() {
+		if (!isActiveVoting) return;
+
 		const tempPicks = { ...picks };
 
 		if (pickedTeam && pickedTeam.id === team1.id) {
@@ -33,6 +35,8 @@ export default function Match({ match, picks, setPicks }: MatchProps) {
 	}
 
 	function handleTeam2Picked() {
+		if (!isActiveVoting) return;
+
 		const tempPicks = { ...picks };
 
 		if (pickedTeam && pickedTeam.id === team2.id) {
@@ -45,8 +49,6 @@ export default function Match({ match, picks, setPicks }: MatchProps) {
 	}
 
 	return (
-		// TODO: make selected team have an outline or some sort of visual indication of choice
-		// can possibly just get rid of "current picked team"
 		<div className="match">
 			<SelectableTeam team={team1} onClick={handleTeam1Picked} pickedTeam={pickedTeam} isRightSide={false} />
 			<span className="versus">
@@ -58,7 +60,8 @@ export default function Match({ match, picks, setPicks }: MatchProps) {
 }
 
 type MatchProps = {
-	match: ApiMatch;
+	match: ApiMatch | ApiMatchResult;
 	picks: MatchPicks;
 	setPicks: React.Dispatch<React.SetStateAction<MatchPicks>>;
+	isActiveVoting: boolean;
 };
