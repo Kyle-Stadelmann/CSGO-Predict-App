@@ -5,14 +5,17 @@ import DaySelect from "../Leaderboard/DaySelect";
 
 export default function Leaderboard({ league }: LeaderboardProps) {
 	const days = [...league.daysMap.keys()].reverse();
-	const [leaderboardDay, setLeaderboardDay] = useState(Math.max(...days));
+	const maxDay = Math.max(...days);
+	const [leaderboardDay, setLeaderboardDay] = useState(maxDay);
 
 	// not really sure how to change the border of the Select
 	return (
 		<div className="leaderboard-window">
 			<br />
-			<h2>Leaderboard</h2>
-			<DaySelect day={leaderboardDay} setDay={setLeaderboardDay} days={days} />
+			<div style={{ display: "flex", justifyContent: "space-between" }}>
+				<h1>Leaderboard</h1>
+				<DaySelect day={leaderboardDay} setDay={setLeaderboardDay} days={days} maxDay={maxDay} />
+			</div>
 			<Players league={league} day={leaderboardDay} />
 		</div>
 	);

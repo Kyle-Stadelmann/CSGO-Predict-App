@@ -3,7 +3,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 export default function DaySelect(props: DaySelectProps) {
-	const { day, setDay, days } = props;
+	const { day, setDay, days, maxDay } = props;
 
 	const handleChange = (event: SelectChangeEvent<number>) => {
 		const currentDay = event.target.value as number;
@@ -12,7 +12,7 @@ export default function DaySelect(props: DaySelectProps) {
 
 	return (
 		<div>
-			<FormControl fullWidth>
+			<FormControl sx={{ minWidth: 140 }}>
 				<Select
 					id="leaderboard-day-select"
 					className="leaderboard-day-select"
@@ -20,9 +20,7 @@ export default function DaySelect(props: DaySelectProps) {
 					onChange={handleChange}
 				>
 					{days.map((day) => (
-						<MenuItem key={day} value={day}>
-							Day {day}
-						</MenuItem>
+						<MenuItem value={day}>{day === maxDay ? "Current day" : `Day ${day}`}</MenuItem>
 					))}
 				</Select>
 			</FormControl>
@@ -34,4 +32,5 @@ type DaySelectProps = {
 	day: number;
 	setDay: React.Dispatch<React.SetStateAction<number>>;
 	days: number[];
+	maxDay: number;
 };
