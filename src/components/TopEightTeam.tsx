@@ -1,33 +1,28 @@
 import { Team } from "csgo-predict-api";
 import React from "react";
 import { useDrag } from "react-dnd";
+import TopEightTeamInfo from "./TopEightTeamInfo";
 
+// TODO: generate type as `TEAM${teamInfo.rank}` if bucket solution works
 const TopEightTeam = ({ teamInfo }: TopEightTeamProps) => {
 	const [{ isDragging }, drag] = useDrag(() => ({
-		type: "TEAM",
+		type: `TEAM`,
 		collect: (monitor) => ({
 			isDragging: !!monitor.isDragging(),
 		}),
 		item: teamInfo,
 	}));
 
-	const dummy = teamInfo.id === -1;
-
-	// the inner classes should maybe be their own components?
 	return (
 		<div
 			className="top-eight-team"
-			ref={dummy ? undefined : drag}
+			ref={drag}
 			style={{
 				opacity: isDragging ? 0.5 : 1,
-				cursor: dummy ? "" : "move",
+				cursor: "move",
 			}}
 		>
-			<div className="top-eight-team-info">
-				{`#${teamInfo.rank}`}
-				<img className="top-eight-team-logo" src={teamInfo.logo_url} />
-				{`${teamInfo.name}`}
-			</div>
+			<TopEightTeamInfo teamInfo={teamInfo} />
 		</div>
 	);
 };

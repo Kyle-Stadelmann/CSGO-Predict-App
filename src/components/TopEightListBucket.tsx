@@ -1,13 +1,15 @@
 import { Team } from "csgo-predict-api";
 import React, { useState } from "react";
-import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
-import TopEightTeam from "./TopEightTeam";
+import { DropTargetMonitor, useDrop } from "react-dnd";
+import TopEightTeamInfo from "./TopEightTeamInfo";
 
 // TODO: css needs to be wildly improved
+// TODO: append ${teamInfo.rank} to the end of `TEAM` in accept
+//       if it's possible for the PicksBuckets to accept any `TEAM${#}`
 const TopEightListBucket = ({ x, y, team, teamInfo, moveTeam }: TopEightListBucketProps) => {
 	const [{ isOver, canDrop }, drop] = useDrop(
 		() => ({
-			accept: "TEAM",
+			accept: `TEAM`,
 			drop: (item, monitor: DropTargetMonitor<Team>) => {
 				moveTeam(x, y, monitor.getItem().id);
 			},
@@ -19,12 +21,11 @@ const TopEightListBucket = ({ x, y, team, teamInfo, moveTeam }: TopEightListBuck
 		[x, y]
 	);
 
-	// no more dummies, the empty ListBucket itself has to show team info
-	// which it has because we added bucketInfo
-	if (team.props.teamInfo.id === -1) {
+	// No team so show bucketInfo
+	if (!team) {
 		return (
 			<div className="top-eight-bucket dummy" ref={drop}>
-				<TopEightTeam teamInfo={team.props.teamInfo} />
+				<TopEightTeamInfo teamInfo={teamInfo} />
 			</div>
 		);
 	}
@@ -40,7 +41,7 @@ const TopEightListBucket = ({ x, y, team, teamInfo, moveTeam }: TopEightListBuck
 type TopEightListBucketProps = {
 	x?: number;
 	y?: number;
-	team: JSX.Element;
+	team?: JSX.Element | undefined;
 	teamInfo: Team;
 	moveTeam: Function;
 };

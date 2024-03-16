@@ -23,7 +23,7 @@ import { getStoredUser } from "../../lib/user-util";
 import { Button } from "@mui/material";
 
 const TopEight = ({ league }: TopEightProps) => {
-	const [topEightData, setTopEightData] = useState([[] as Team[], [] as Team[]]);
+	const [topEightData, setTopEightData] = useState([[], []] as (Team | undefined)[][]);
 	const [topEightBuckets, setTopEightBuckets] = useState([] as JSX.Element[][]);
 	const [originalTeamList, setOriginalTeamList] = useState([] as Team[]);
 
@@ -60,34 +60,29 @@ const TopEight = ({ league }: TopEightProps) => {
 		initTeams();
 	}, [league.id]);
 
-	// so we could not use dummies....... i cant think about this
-	// ok i think we actually can't use dummies
-	// i think we can just render buckets with no teams
-	// so the main thing is to figure out how to represent empties in data
-
 	// there might be a way to only re-render changed buckets, idk enough React to know how to do that though
 	useEffect(() => {
-		const constructBuckets = (data: Team[][]): JSX.Element[][] => {
-			const topEightPicksBuckets = data[0].map((team: Team, index) => {
+		const constructBuckets = (data: (Team | undefined)[][]): JSX.Element[][] => {
+			const topEightPicksBuckets = data[0].map((team: Team | undefined, index) => {
 				return (
 					<TopEightTeamPicksBucket
 						key={index}
 						x={0}
 						y={index}
-						team={<TopEightTeam teamInfo={team} />}
+						team={team ? <TopEightTeam teamInfo={team} /> : undefined}
 						moveTeam={moveTeam}
 					/>
 				);
 			});
 			// ok we got bucketInfo, now we need them to be undraggable
-			const topEightListBuckets = data[1].map((team: Team, index) => {
-				const bucketInfo = team.id === -1 ? originalTeamList[index] : team;
+			const topEightListBuckets = data[1].map((team: Team | undefined, index) => {
+				const bucketInfo = team ? team : originalTeamList[index];
 				return (
 					<TopEightTeamListBucket
 						key={index}
 						x={1}
 						y={index}
-						team={<TopEightTeam teamInfo={team} />}
+						team={team ? <TopEightTeam teamInfo={team} /> : undefined}
 						teamInfo={bucketInfo}
 						moveTeam={moveTeam}
 					/>
@@ -101,64 +96,42 @@ const TopEight = ({ league }: TopEightProps) => {
 			const tempData = topEightData.slice();
 
 			// current x, y pos of team with team.id === id
-			const xI = topEightData.findIndex((x: Team[]) => {
-				return x.find((team: Team) => team.id === id) ? true : false;
+			const xI = topEightData.findIndex((x: (Team | undefined)[]) => {
+				return x.find((team: Team | undefined) => (team ? team.id === id : false)) ? true : false;
 			});
-			const yI = topEightData[xI].findIndex((team: Team) => {
-				return team.id === id;
+			const yI = topEightData[xI].findIndex((team: Team | undefined) => {
+				return team ? team.id === id : false;
 			});
 
 			// move data
-			console.log(
-				`Moving data (${xI}, ${yI}) (${topEightData[xI][yI].name}) to (${x}, ${y}) (${topEightData[x][y].name})`
-			);
 			const tempTeamData = tempData[xI][yI];
-			console.log(`You are moving ${tempTeamData.name}, from ${xI === 0 ? "Picks " : "List "}${yI + 1}`);
 			tempData[xI][yI] = tempData[x][y];
-			console.log(`You are overwriting ${tempData[x][y].name}, at ${x === 0 ? "Picks " : "List "}${y + 1}`);
 			tempData[x][y] = tempTeamData;
 			setTopEightData(tempData);
-			console.log(`team at tempData[${xI}][${yI}]: ${tempData[xI][yI].name}`);
-			console.log(`team at topEightData[${xI}][${yI}]: ${topEightData[xI][yI].name}`);
 		};
 
 		setTopEightBuckets(constructBuckets(topEightData));
 	}, [originalTeamList, topEightData]);
 
-	function replacePickedTeams(teams: Team[], pickedTeams: Team[]) {
-		return teams.map((team: Team) => {
-			if (pickedTeams.includes(team)) {
-				const dummyTeam: Team = {
-					id: -1,
-					name: "Dummy Team",
-					country: { name: "Dummiya", code: "DY" },
-					rank: -1,
-				};
-				return dummyTeam;
-			} else {
-				return team;
-			}
+	function replacePickedTeams(listTeams: (Team | undefined)[], pickedTeams: (Team | undefined)[]) {
+		return listTeams.map((team: Team | undefined) => {
+			if (pickedTeams.includes(team)) return undefined;
+			else return team;
 		});
 	}
 
-	function padPickedTeams(pickedTeams: Team[]) {
+	function padPickedTeams(pickedTeams: (Team | undefined)[]) {
 		for (let i = pickedTeams.length; i < 8; i++) {
-			const dummyTeam: Team = {
-				id: -1,
-				name: "Dummy Team",
-				country: { name: "Dummiya", code: "DY" },
-				rank: -1,
-			};
-			pickedTeams.push(dummyTeam);
+			pickedTeams.push(undefined);
 		}
 	}
 
-	async function submitPlayoffPredictions(predictedTeams: Team[]) {
-		const noDummyPreds = predictedTeams.filter((team) => team.id !== -1);
+	async function submitPlayoffPredictions(predictedTeams: (Team | undefined)[]) {
+		const noEmptyPreds = predictedTeams.filter((team) => !!team) as Team[];
 		const playoffPreds: PlayoffPredictions = {
 			userId: getStoredUser()!.id,
 			leagueId: league.id,
-			teamIds: noDummyPreds.map((team) => team.id),
+			teamIds: noEmptyPreds.map((team) => team.id),
 			date: new Date(),
 		};
 		try {
