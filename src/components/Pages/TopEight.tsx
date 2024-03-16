@@ -3,14 +3,14 @@
 // user picks the 8 teams they think are gonna be in top 8 (champion stage)
 // user may not (re)submit this once the first match of the tournament has started
 
-import TopEightPicks from "../TopEightPicks";
-import TopEightList from "../TopEightList";
+import TopEightPicks from "../TopEight/TopEightPicks";
+import TopEightList from "../TopEight/TopEightList";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useEffect, useState } from "react";
-import TopEightTeam from "../TopEightTeam";
-import TopEightTeamPicksBucket from "../TopEightPicksBucket";
-import TopEightTeamListBucket from "../TopEightListBucket";
+import TopEightTeam from "../TopEight/TopEightTeam";
+import TopEightTeamPicksBucket from "../TopEight/TopEightPicksBucket";
+import TopEightTeamListBucket from "../TopEight/TopEightListBucket";
 import {
 	League,
 	Team,
@@ -38,7 +38,7 @@ const TopEight = ({ league }: TopEightProps) => {
 			try {
 				playoffPreds = await getPlayoffPreds(userId, league.id);
 			} catch (e) {
-				// no point in logging that user has no predictions imo
+				console.error(e);
 			}
 
 			try {
@@ -78,7 +78,6 @@ const TopEight = ({ league }: TopEightProps) => {
 					/>
 				);
 			});
-
 			const topEightListBuckets = data[1].map((team: Team | undefined, index) => {
 				const bucketInfo = !!team ? team : originalTeamList[index];
 				return (
