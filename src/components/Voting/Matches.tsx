@@ -45,7 +45,7 @@ export default function Matches({ matches, setMatches, picks, setPicks }: Matche
 
 type MatchesProps = {
 	matches: ApiMatch[];
-	setMatches: Function;
+	setMatches: React.Dispatch<React.SetStateAction<ApiMatch[]>>;
 	picks: MatchPicks;
-	setPicks: Function;
+	setPicks: React.Dispatch<React.SetStateAction<MatchPicks>>;
 };

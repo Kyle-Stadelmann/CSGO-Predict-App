@@ -66,17 +66,22 @@ export default function Voting({ league }: VotingProps) {
 	}
 
 	async function initPicks() {
+		const userId = getStoredUser()?.id;
+		if (!userId) return;
+
+		let dayPreds: DayPredictions | undefined;
 		try {
-			const userId = getStoredUser()?.id;
-			if (!userId) return;
-			const dayPreds = await getDayPredictions(userId, DEFAULT_LEAGUE_ID);
+			dayPreds = await getDayPredictions(userId, DEFAULT_LEAGUE_ID);
+		} catch (e) {
+			console.error(e);
+		}
+
+		if (dayPreds) {
 			const initPicks: MatchPicks = {};
 			dayPreds.predictions.forEach((p) => {
 				initPicks[p.matchId] = p.choiceTeamId;
 			});
 			setPicks(initPicks);
-		} catch (e) {
-			console.error(e);
 		}
 	}
 
