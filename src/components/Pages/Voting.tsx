@@ -166,9 +166,10 @@ export default function Voting({ league }: VotingProps) {
 		setVotingDay(maxDay);
 	}, [maxDay]);
 
+	// TODO: Reduce the number of times we fetchResults
 	useEffect(() => {
-		fetchResults(votingDay);
-	}, [votingDay]);
+		if (!isActiveVoting || maxDay !== votingDay) fetchResults(votingDay);
+	}, [isActiveVoting, maxDay, votingDay]);
 
 	return (
 		<div className="voting-window">
