@@ -31,9 +31,8 @@ export default function LeaderboardList({ league, day }: PlayersProps) {
 	function createListEntry(leagueDayResult: UserLeagueDayResults, placing: number): JSX.Element {
 		const { user, dayScore, runningDayScore } = leagueDayResult;
 		return (
-			<ListItem disablePadding>
+			<ListItem key={user.id} disablePadding>
 				<LeaderboardEntry
-					key={user.id}
 					user={user}
 					placing={placing}
 					dayScore={dayScore}
