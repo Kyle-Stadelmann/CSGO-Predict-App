@@ -7,7 +7,7 @@ import Voting from "./Voting";
 import { useState } from "react";
 import TopEight from "./TopEight";
 
-const Tournament = ({league, topEightBool}: TournamentProps) => {
+const Tournament = ({ league, topEightBool }: TournamentProps) => {
 	if (!topEightBool) {
 		return (
 			<div className="tournament">
@@ -20,13 +20,13 @@ const Tournament = ({league, topEightBool}: TournamentProps) => {
 			<div className="tournament">
 				<TopEight league={league} />
 			</div>
-		)
+		);
 	}
 };
 
 type TournamentProps = {
-    league: League;
+	league: League;
 	topEightBool: boolean;
-}
+};
 
 export default Tournament;
