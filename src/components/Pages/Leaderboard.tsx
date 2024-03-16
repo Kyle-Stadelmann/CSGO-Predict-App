@@ -1,4 +1,4 @@
-import Players from "../Leaderboard/Players";
+import LeaderboardList from "../Leaderboard/LeaderboardList";
 import { League } from "csgo-predict-api";
 import { useState } from "react";
 import DaySelect from "../Leaderboard/DaySelect";
@@ -16,7 +16,7 @@ export default function Leaderboard({ league }: LeaderboardProps) {
 				<h1>Leaderboard</h1>
 				<DaySelect day={leaderboardDay} setDay={setLeaderboardDay} days={days} maxDay={maxDay} />
 			</div>
-			<Players league={league} day={leaderboardDay} />
+			<LeaderboardList league={league} day={leaderboardDay} />
 		</div>
 	);
 }
