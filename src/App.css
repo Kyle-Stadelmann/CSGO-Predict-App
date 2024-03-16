@@ -55,35 +55,48 @@
 }
 
 .match {
-	border: 1px solid;
-	padding: 2px;
-	background-color: whitesmoke;
-	opacity: 0.6;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
-.match-pic {
-	width: 20%;
-	height: 20%;
-	pointer-events: all;
-	cursor: pointer;
-}
-
-.match-window {
+.match-list {
 	border: 2px solid;
 }
 
 .team-container {
+	background-color: whitesmoke;
+	opacity: 0.6;
+	padding: 10px;
+	margin: 10px;
+	border: 2px solid;
+	pointer-events: all;
 	display: flex;
+	align-items: center;
+	width: 200px;
 }
 
-.team {
-	flex: 1;
+.versus {
+	height: 50px;
+	width: 50px;
+	background-color: whitesmoke;
+	border-radius: 50%;
+	opacity: 0.6;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 2px solid;
 }
 
 .submit-predictions-btn {
 	position: relative;
 	top: 10px;
 	scale: 1.7;
+}
+
+.submit-predictions-str {
+	padding-top: 20px;
 }
 
 .theme-btn {
@@ -93,18 +106,12 @@
 }
 
 .voting-window {
-	margin: auto;
-	width: 40%;
 	padding: 40px;
-	text-align: center;
 	flex: 1;
 }
 
 .leaderboard-window {
-	margin: auto;
-	width: 40%;
 	padding: 40px;
-	text-align: center;
 	flex: 1;
 }
 
@@ -116,13 +123,17 @@
 	display: flex;
 }
 
-.player {
+.leaderboard-entry {
 	border: 1px solid;
 	background-color: #f5f5f5; /* this is whitesmoke */
 	opacity: 0.6;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
 }
 
-.player-window {
+.leaderboard-list {
 	border: 2px solid;
 }
 
@@ -136,59 +147,69 @@
 }
 
 .top-eight-page {
-    margin-left: 30%;
+	background-color: #959595;
 }
 
 .top-eight {
-    display: flex;
+	display: flex;
 }
 
 .top-eight-picks-wrapper {
-    background-color: #fff00f;
-    display: inline-block;
-    padding: 5px;
+	background-color: #959595;
+	display: inline-block;
+	padding: 5px;
 }
 
 .top-eight-picks {
-    display: grid;
-    border: 2px solid;
+	display: grid;
+	border: 1px solid;
 }
 
 .top-eight-list-wrapper {
-    background-color: #f00fff;
-    display: inline-block;
-    padding: 5px;
+	background-color: #959595;
+	display: inline-block;
+	padding: 5px;
 }
 
 .top-eight-list {
-    display: grid;
-    border: 2px solid;
+	display: grid;
+	border: 2px solid;
 }
 
-.top-eight-team-bucket {
-    border: 5px solid;
-    width: 350px;
-    height: 45px;
+.top-eight-bucket {
+	border: 2px solid;
+	width: 350px;
+	height: 45px;
 }
 
-.list {
-    border: 0px;
-    opacity: 0.5;
+.empty {
+	border: 1px;
+	opacity: 0.5;
 }
 
 .top-eight-team {
-    background-color: #f5f5f5;
+	background-color: #dadada;
 	/*opacity: 0.6;*/
-    display: inline-block;
-    border: 2px solid;
-    width: 400px;
-    height: 50px;
-    font-size: 24px;
-    line-height: 50px;
-    text-align: left;
+	display: inline-block;
+	border: 2px solid;
+	border-color: #d6b7ff;
+	width: 346px;
+	height: 41px;
+	font-size: 24px;
+	line-height: 50px;
+	text-align: left;
+}
+
+.top-eight-team-info {
+	display: inline-block;
+	width: 346px;
+	height: 41px;
+	font-size: 24px;
+	line-height: 50px;
+	text-align: left;
 }
 
 .top-eight-team-logo {
-    /* fuck off */
-    width: 10%;
+	/* fuck off */
+	width: 10%;
 }

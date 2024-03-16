@@ -3,97 +3,170 @@
 // user picks the 8 teams they think are gonna be in top 8 (champion stage)
 // user may not (re)submit this once the first match of the tournament has started
 
-import { League, Team } from "csgo-predict-api";
-import TopEightPicks from "../TopEightPicks";
-import TopEightList from "../TopEightList";
+import TopEightPicks from "../TopEight/TopEightPicks";
+import TopEightList from "../TopEight/TopEightList";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useEffect, useState } from "react";
-import TopEightTeam from "../TopEightTeam";
-import TopEightTeamBucket from "../TopEightTeamBucket";
+import TopEightTeam from "../TopEight/TopEightTeam";
+import TopEightTeamPicksBucket from "../TopEight/TopEightPicksBucket";
+import TopEightTeamListBucket from "../TopEight/TopEightListBucket";
+import {
+	League,
+	Team,
+	PlayoffPredictions,
+	getLeagueTeams,
+	getPlayoffPredictions as getPlayoffPreds,
+	submitPlayoffPredictions as submitPlayoffPreds,
+} from "csgo-predict-api";
+import { getStoredUser } from "../../lib/user-util";
+import { Button } from "@mui/material";
 
-const TopEight = ({league}: TopEightProps) => {
-    let testTeams: Team[] = [{
-        id: 1,
-        name: "Heroic",
-        logo_url: "https://upload.wikimedia.org/wikipedia/commons/8/8f/Heroic_2023_logo.png",
-        country: {
-            name: "Denmark",
-            code: "DN"
-        },
-        rank: 1,
-    },
-    {
-        id: 2,
-        name: "G2",
-        logo_url: "https://upload.wikimedia.org/wikipedia/en/thumb/1/12/Esports_organization_G2_Esports_logo.svg/1200px-Esports_organization_G2_Esports_logo.svg.png",
-        country: {
-            name: "International",
-            code: "INT"
-        },
-        rank: 2
-    }];
-    
-    const topEightPicks: Team[] = new Array(8).fill(0).map(() => ({id: -1} as Team));
-    // the below information will be grabbed from backend
-    const topEightTeams: Team[] = testTeams;
-    const [ topEightData, setTopEightData ] = useState([topEightPicks, topEightTeams]);
-    const [ topEightBuckets, setTopEightBuckets ] = useState([] as JSX.Element[][]);
+const TopEight = ({ league }: TopEightProps) => {
+	const [topEightData, setTopEightData] = useState([[], []] as (Team | undefined)[][]);
+	const [topEightBuckets, setTopEightBuckets] = useState([] as JSX.Element[][]);
+	const [originalTeamList, setOriginalTeamList] = useState([] as Team[]);
+	// i tried doing this with symbols but idk how symbols work. seemed cool tho
+	const [dropTypes, setDropTypes] = useState([] as string[]);
 
-    const moveTeam = (x: number, y: number, id: number) => {
-        const tempData = topEightData.slice();
+	useEffect(() => {
+		async function initTeams() {
+			const userId = getStoredUser()?.id;
+			if (!userId) return;
 
-        // current x, y pos of team with team.id === id
-        const xI = topEightData.findIndex((x: Team[]) => {
-            return x.find((team: Team) => team.id === id) ? true : false;
-        });
-        const yI = topEightData[xI].findIndex((team: Team) => {
-            return team.id === id;
-        });
+			let playoffPreds: PlayoffPredictions | undefined;
+			try {
+				playoffPreds = await getPlayoffPreds(userId, league.id);
+			} catch (e) {
+				console.error(e);
+			}
 
-        // move data
-        const tempTeamData = tempData[x][y];
-        tempData[x][y] = tempData[xI][yI];
-        tempData[xI][yI] = tempTeamData;
-        setTopEightData(tempData);
-    }
+			try {
+				// TODO: add a.rank, b.rank existence checks
+				const teams = (await getLeagueTeams(league.id)).sort((a, b) => a.rank! - b.rank!);
+				setOriginalTeamList(teams);
+				setDropTypes(teams.map((team) => team.id.toString()));
 
-    const constructBuckets = (data: Team[][]): JSX.Element[][] => {
-        const topEightPicksBuckets: JSX.Element[] = [];
-        const topEightListBuckets: JSX.Element[] = [];
+				const pickedTeams = teams.filter((team: Team) => {
+					return !!playoffPreds ? playoffPreds.teamIds.includes(team.id) : false;
+				});
+				const nonPickedTeams = replacePickedTeams(teams, pickedTeams);
+				padPickedTeams(pickedTeams);
 
-        data[0].forEach((team: Team, index) => {
-            topEightPicksBuckets.push(<TopEightTeamBucket x={0} y={index} team={<TopEightTeam teamInfo={team} />} moveTeam={moveTeam} />)
-        });
-        data[1].forEach((team: Team, index) => {
-            topEightListBuckets.push(<TopEightTeamBucket x={1} y={index} team={<TopEightTeam teamInfo={team} />} moveTeam={moveTeam} />)
-        });
+				const data = [[...pickedTeams], [...nonPickedTeams]];
+				setTopEightData(data);
+			} catch (e) {
+				console.error(e);
+			}
+		}
 
-        return [topEightPicksBuckets, topEightListBuckets];
-    }
-    
-    useEffect (() => {
-        setTopEightBuckets(constructBuckets(topEightData));
-    }, [topEightData]);
+		initTeams();
+	}, [league.id]);
+
+	// there might be a way to only re-render changed buckets, idk enough React to know how to do that though
+	useEffect(() => {
+		const constructBuckets = (data: (Team | undefined)[][]): JSX.Element[][] => {
+			const topEightPicksBuckets = data[0].map((team: Team | undefined, index) => {
+				return (
+					<TopEightTeamPicksBucket
+						key={index}
+						x={0}
+						y={index}
+						team={!!team ? <TopEightTeam teamInfo={team} /> : undefined}
+						moveTeam={moveTeam}
+						dropTypes={dropTypes}
+					/>
+				);
+			});
+			const topEightListBuckets = data[1].map((team: Team | undefined, index) => {
+				const bucketInfo = !!team ? team : originalTeamList[index];
+				return (
+					<TopEightTeamListBucket
+						key={index}
+						x={1}
+						y={index}
+						team={!!team ? <TopEightTeam teamInfo={team} /> : undefined}
+						bucketInfo={bucketInfo}
+						moveTeam={moveTeam}
+					/>
+				);
+			});
+
+			return [topEightPicksBuckets, topEightListBuckets];
+		};
+
+		const moveTeam = (x: number, y: number, id: number) => {
+			const tempData = topEightData.slice();
+
+			// current x, y pos of team with team.id === id
+			const xI = topEightData.findIndex((x: (Team | undefined)[]) => {
+				return x.find((team: Team | undefined) => (!!team ? team.id === id : false)) ? true : false;
+			});
+			const yI = topEightData[xI].findIndex((team: Team | undefined) => {
+				return !!team ? team.id === id : false;
+			});
+
+			// move data
+			const tempTeamData = tempData[xI][yI];
+			tempData[xI][yI] = tempData[x][y];
+			tempData[x][y] = tempTeamData;
+			setTopEightData(tempData);
+		};
+
+		setTopEightBuckets(constructBuckets(topEightData));
+	}, [dropTypes, originalTeamList, topEightData]);
+
+	function replacePickedTeams(listTeams: (Team | undefined)[], pickedTeams: (Team | undefined)[]) {
+		return listTeams.map((team: Team | undefined) => {
+			if (pickedTeams.includes(team)) return undefined;
+			else return team;
+		});
+	}
+
+	function padPickedTeams(pickedTeams: (Team | undefined)[]) {
+		for (let i = pickedTeams.length; i < 8; i++) {
+			pickedTeams.push(undefined);
+		}
+	}
+
+	async function submitPlayoffPredictions(predictedTeams: (Team | undefined)[]) {
+		const noEmptyPreds = predictedTeams.filter((team) => !!team) as Team[];
+		const playoffPreds: PlayoffPredictions = {
+			userId: getStoredUser()!.id,
+			leagueId: league.id,
+			teamIds: noEmptyPreds.map((team) => team.id),
+			date: new Date(),
+		};
+		try {
+			await submitPlayoffPreds(playoffPreds);
+		} catch (e) {
+			console.error(e);
+		}
+	}
 
 	return (
-		<div className="top-eight-page">
-			this is the top eight page for the league with Tournament ID {`${league.tournamentId}`}
-            <br />
-            <div className="top-eight">
-                <DndProvider backend={HTML5Backend}>
-                    <TopEightPicks teams={topEightBuckets[0]} />
-                    <TopEightList teams={topEightBuckets[1]} />
-                </DndProvider>
-            </div>
+		<div className="top-eight-page center">
+			Playoff Predictions - {league.tournamentName}
+			<br />
+			On the left side, place the 8 teams you think will make it to playoffs!
+			<br />
+			<div className="top-eight">
+				<DndProvider backend={HTML5Backend}>
+					<TopEightPicks teams={topEightBuckets[0]} />
+					<TopEightList teams={topEightBuckets[1]} />
+				</DndProvider>
+			</div>
+			<div className="top-eight-submit-button">
+				<Button variant="contained" color="success" onClick={() => submitPlayoffPredictions(topEightData[0])}>
+					Submit Predictions!
+				</Button>
+			</div>
 		</div>
 	);
 };
 
-// 'Lock in Picks!' button on this page that will call setPlayoffPredictions API wrapper
-
 type TopEightProps = {
-    league: League;
-}
+	league: League;
+};
 
 export default TopEight;
