@@ -1,13 +1,11 @@
 import { Team } from "csgo-predict-api";
-import React, { useState } from "react";
-import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
-import TopEightTeam from "./TopEightTeam";
+import { DropTargetMonitor, useDrop } from "react-dnd";
 
 // TODO: css needs to be wildly improved
-const TopEightPicksBucket = ({ x, y, team, moveTeam }: TopEightPicksBucketProps) => {
+const TopEightPicksBucket = ({ x, y, team, dropTypes, moveTeam }: TopEightPicksBucketProps) => {
 	const [{ isOver, canDrop }, drop] = useDrop(
 		() => ({
-			accept: "TEAM",
+			accept: dropTypes,
 			drop: (item, monitor: DropTargetMonitor<Team>) => {
 				moveTeam(x, y, monitor.getItem().id);
 			},
@@ -20,7 +18,7 @@ const TopEightPicksBucket = ({ x, y, team, moveTeam }: TopEightPicksBucketProps)
 	);
 
 	// Render empty PicksBucket if no team or dummy team
-	if (!team || team.props.teamInfo.id === -1) {
+	if (!team) {
 		return (
 			<div className="top-eight-bucket" ref={drop}>
 				TEAM BUCKET
@@ -42,6 +40,7 @@ type TopEightPicksBucketProps = {
 	y?: number;
 	team?: JSX.Element | undefined;
 	moveTeam: Function;
+	dropTypes: string[];
 };
 
 export default TopEightPicksBucket;

@@ -26,7 +26,10 @@ const TopEight = ({ league }: TopEightProps) => {
 	const [topEightData, setTopEightData] = useState([[], []] as (Team | undefined)[][]);
 	const [topEightBuckets, setTopEightBuckets] = useState([] as JSX.Element[][]);
 	const [originalTeamList, setOriginalTeamList] = useState([] as Team[]);
+	// i tried doing this with symbols but idk how symbols work. seemed cool tho
+	const [dropTypes, setDropTypes] = useState([] as string[]);
 
+	// i need this to only run once but it is running a lot more than once.
 	useEffect(() => {
 		async function initTeams() {
 			const userId = getStoredUser()?.id;
@@ -43,10 +46,11 @@ const TopEight = ({ league }: TopEightProps) => {
 				// TODO: add a.rank, b.rank existence checks
 				const teams = (await getLeagueTeams(league.id)).sort((a, b) => a.rank! - b.rank!);
 				setOriginalTeamList(teams);
-				const pickedTeams = teams.filter((team: Team) => {
-					return playoffPreds ? playoffPreds.teamIds.includes(team.id) : false;
-				});
+				setDropTypes(teams.map((team) => team.id.toString()));
 
+				const pickedTeams = teams.filter((team: Team) => {
+					return !!playoffPreds ? playoffPreds.teamIds.includes(team.id) : false;
+				});
 				const nonPickedTeams = replacePickedTeams(teams, pickedTeams);
 				padPickedTeams(pickedTeams);
 
@@ -69,21 +73,22 @@ const TopEight = ({ league }: TopEightProps) => {
 						key={index}
 						x={0}
 						y={index}
-						team={team ? <TopEightTeam teamInfo={team} /> : undefined}
+						team={!!team ? <TopEightTeam teamInfo={team} /> : undefined}
 						moveTeam={moveTeam}
+						dropTypes={dropTypes}
 					/>
 				);
 			});
-			// ok we got bucketInfo, now we need them to be undraggable
+
 			const topEightListBuckets = data[1].map((team: Team | undefined, index) => {
-				const bucketInfo = team ? team : originalTeamList[index];
+				const bucketInfo = !!team ? team : originalTeamList[index];
 				return (
 					<TopEightTeamListBucket
 						key={index}
 						x={1}
 						y={index}
-						team={team ? <TopEightTeam teamInfo={team} /> : undefined}
-						teamInfo={bucketInfo}
+						team={!!team ? <TopEightTeam teamInfo={team} /> : undefined}
+						bucketInfo={bucketInfo}
 						moveTeam={moveTeam}
 					/>
 				);
@@ -97,10 +102,10 @@ const TopEight = ({ league }: TopEightProps) => {
 
 			// current x, y pos of team with team.id === id
 			const xI = topEightData.findIndex((x: (Team | undefined)[]) => {
-				return x.find((team: Team | undefined) => (team ? team.id === id : false)) ? true : false;
+				return x.find((team: Team | undefined) => (!!team ? team.id === id : false)) ? true : false;
 			});
 			const yI = topEightData[xI].findIndex((team: Team | undefined) => {
-				return team ? team.id === id : false;
+				return !!team ? team.id === id : false;
 			});
 
 			// move data
@@ -111,7 +116,7 @@ const TopEight = ({ league }: TopEightProps) => {
 		};
 
 		setTopEightBuckets(constructBuckets(topEightData));
-	}, [originalTeamList, topEightData]);
+	}, [dropTypes, originalTeamList, topEightData]);
 
 	function replacePickedTeams(listTeams: (Team | undefined)[], pickedTeams: (Team | undefined)[]) {
 		return listTeams.map((team: Team | undefined) => {
