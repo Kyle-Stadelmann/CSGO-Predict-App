@@ -19,12 +19,7 @@ const TopEightPicksBucket = ({ x, y, team, dropTypes, moveTeam }: TopEightPicksB
 
 	// Render empty PicksBucket if no team or dummy team
 	if (!team) {
-		return (
-			<div className="top-eight-bucket" ref={drop}>
-				TEAM BUCKET
-				{` no team lool`}
-			</div>
-		);
+		return <div className="top-eight-bucket" ref={drop}></div>;
 	}
 
 	// Render PicksBucket with team

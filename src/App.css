@@ -140,7 +140,7 @@
 }
 
 .top-eight-page {
-	margin-left: 30%;
+	background-color: #959595;
 }
 
 .top-eight {
@@ -148,7 +148,7 @@
 }
 
 .top-eight-picks-wrapper {
-	background-color: #fff00f;
+	background-color: #959595;
 	display: inline-block;
 	padding: 5px;
 }
@@ -159,7 +159,7 @@
 }
 
 .top-eight-list-wrapper {
-	background-color: #f00fff;
+	background-color: #959595;
 	display: inline-block;
 	padding: 5px;
 }
@@ -170,23 +170,33 @@
 }
 
 .top-eight-bucket {
-	border: 3px solid;
+	border: 2px solid;
 	width: 350px;
 	height: 45px;
 }
 
-.dummy {
-	border: 0px;
+.empty {
+	border: 1px;
 	opacity: 0.5;
 }
 
 .top-eight-team {
-	background-color: #f5f5f5;
+	background-color: #dadada;
 	/*opacity: 0.6;*/
 	display: inline-block;
 	border: 2px solid;
-	width: 400px;
-	height: 50px;
+	border-color: #d6b7ff;
+	width: 346px;
+	height: 41px;
+	font-size: 24px;
+	line-height: 50px;
+	text-align: left;
+}
+
+.top-eight-team-info {
+	display: inline-block;
+	width: 346px;
+	height: 41px;
 	font-size: 24px;
 	line-height: 50px;
 	text-align: left;

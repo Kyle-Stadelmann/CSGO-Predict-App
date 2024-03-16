@@ -29,7 +29,6 @@ const TopEight = ({ league }: TopEightProps) => {
 	// i tried doing this with symbols but idk how symbols work. seemed cool tho
 	const [dropTypes, setDropTypes] = useState([] as string[]);
 
-	// i need this to only run once but it is running a lot more than once.
 	useEffect(() => {
 		async function initTeams() {
 			const userId = getStoredUser()?.id;
@@ -147,8 +146,10 @@ const TopEight = ({ league }: TopEightProps) => {
 	}
 
 	return (
-		<div className="top-eight-page">
-			this is the top eight page for the league with Tournament ID {`${league.tournamentId}`}
+		<div className="top-eight-page center">
+			Playoff Predictions - {league.tournamentName}
+			<br />
+			On the left side, place the 8 teams you think will make it to playoffs!
 			<br />
 			<div className="top-eight">
 				<DndProvider backend={HTML5Backend}>

@@ -3,8 +3,6 @@ import { DropTargetMonitor, useDrop } from "react-dnd";
 import TopEightTeamInfo from "./TopEightTeamInfo";
 
 // TODO: css needs to be wildly improved
-// TODO: append ${teamInfo.rank} to the end of `TEAM` in accept
-//       if it's possible for the PicksBuckets to accept any `TEAM${#}`
 const TopEightListBucket = ({ x, y, team, bucketInfo, moveTeam }: TopEightListBucketProps) => {
 	const [{ isOver, canDrop }, drop] = useDrop(
 		() => ({
@@ -23,7 +21,7 @@ const TopEightListBucket = ({ x, y, team, bucketInfo, moveTeam }: TopEightListBu
 	// No team so show bucketInfo
 	if (!team) {
 		return (
-			<div className="top-eight-bucket dummy" ref={drop}>
+			<div className="top-eight-bucket empty" ref={drop}>
 				<TopEightTeamInfo teamInfo={bucketInfo} />
 			</div>
 		);
