@@ -13,7 +13,7 @@ export default function SelectableTeam({ team, onClick, pickedTeam, isRightSide 
 			onClick={onClick}
 		>
 			{isRightSide ? <h3>{team.name}</h3> : <></>}
-			<img src={team.logo_url} alt="Missing Logo" style={{ ...imgStyle, width: "25%" }} />
+			<img src={team.logo_url} alt="Missing Logo" style={{ ...imgStyle, width: "45%" }} />
 			{isRightSide ? <></> : <h3>{team.name}</h3>}
 		</div>
 	);
