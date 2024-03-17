@@ -30,7 +30,7 @@ export default function LeaderboardEntry({
 type LeaderboardEntryProps = {
 	user: User;
 	placing: number;
-	dayScore: number;
+	dayScore: string;
 	maxDayScore: number;
 	runningScore: number;
 	maxRunningScore: number;

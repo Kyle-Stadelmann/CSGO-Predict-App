@@ -10,7 +10,6 @@ import {
 	getDayPredictions,
 	League,
 	getCurrentDayMatches,
-	Match,
 	MatchResult,
 	getResultsFromDay,
 } from "csgo-predict-api";
@@ -27,7 +26,8 @@ export default function Voting({ league }: VotingProps) {
 	const [picks, setPicks] = useState({} as MatchPicks);
 	const [predSubmissionHeader, setPredSubmissionHeader] = useState(<></>);
 
-	const days = getDaysList(upcomingMatches);
+	// TODO: why are days strings and not numbers ....
+	const days = [...league.daysMap.keys()].sort((a, b) => +a - +b).reverse();
 	const maxDay = Math.max(...days);
 	const [votingDay, setVotingDay] = useState(maxDay);
 
@@ -38,12 +38,6 @@ export default function Voting({ league }: VotingProps) {
 		upcomingMatches.length > 0 &&
 		votingDay === upcomingMatches[0].day &&
 		upcomingMatches.some((m) => m.date > date);
-
-	function getDaysList(matches: Match[]): number[] {
-		const days = new Set(league.daysMap.keys());
-		if (matches.length > 0) days.add(matches[0].day);
-		return [...days].reverse();
-	}
 
 	async function submitPredictions() {
 		const user = getStoredUser();
@@ -159,12 +153,6 @@ export default function Voting({ league }: VotingProps) {
 		fetchMatches();
 		initPicks();
 	}, []);
-
-	useEffect(() => {
-		// Voting day needs to be udpated after upcoming matches are fetched
-		// in order to default to the upcoming matches page
-		setVotingDay(maxDay);
-	}, [maxDay]);
 
 	// TODO: Reduce the number of times we fetchResults
 	useEffect(() => {

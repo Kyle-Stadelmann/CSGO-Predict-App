@@ -1,10 +1,11 @@
 import LeaderboardList from "../Leaderboard/LeaderboardList";
-import { League } from "csgo-predict-api";
+import { League, LeagueDay } from "csgo-predict-api";
 import { useState } from "react";
 import DaySelect from "../DaySelect";
 
 export default function Leaderboard({ league }: LeaderboardProps) {
-	const days = [...league.daysMap.keys()].reverse();
+	// TODO: why are days strings and not numbers ....
+	const days = [...league.daysMap.keys()].sort((a, b) => +a - +b).reverse();
 	const maxDay = Math.max(...days);
 	const [leaderboardDay, setLeaderboardDay] = useState(maxDay);
 
