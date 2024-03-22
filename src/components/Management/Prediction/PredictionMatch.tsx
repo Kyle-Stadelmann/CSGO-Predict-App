@@ -1,9 +1,9 @@
 // TODO: add a submitted status indicator at the right side
 import { Match as ApiMatch, Team as ApiTeam, MatchResult as ApiMatchResult } from "csgo-predict-api";
-import { MatchPicks } from "../Pages/Voting";
-import SelectableTeam from "./SelectableTeam";
+import { MatchPicks } from "../Prediction";
+import PredictionTeamCard from "./PredictionTeamCard";
 
-export default function Match({ match, picks, setPicks, isActiveVoting }: MatchProps) {
+export default function PredictionMatch({ match, picks, setPicks }: PredictionMatchProps) {
 	const team1 = match.team1;
 	const team2 = match.team2;
 	const pickedTeam = getPickedTeam();
@@ -21,8 +21,6 @@ export default function Match({ match, picks, setPicks, isActiveVoting }: MatchP
 	}
 
 	function handleTeam1Picked() {
-		if (!isActiveVoting) return;
-
 		const tempPicks = { ...picks };
 
 		if (pickedTeam && pickedTeam.id === team1.id) {
@@ -35,8 +33,6 @@ export default function Match({ match, picks, setPicks, isActiveVoting }: MatchP
 	}
 
 	function handleTeam2Picked() {
-		if (!isActiveVoting) return;
-
 		const tempPicks = { ...picks };
 
 		if (pickedTeam && pickedTeam.id === team2.id) {
@@ -50,18 +46,17 @@ export default function Match({ match, picks, setPicks, isActiveVoting }: MatchP
 
 	return (
 		<div className="match">
-			<SelectableTeam team={team1} onClick={handleTeam1Picked} pickedTeam={pickedTeam} isRightSide={false} />
+			<PredictionTeamCard team={team1} onClick={handleTeam1Picked} pickedTeam={pickedTeam} isRightSide={false} />
 			<span className="versus">
 				<h2>vs</h2>
 			</span>
-			<SelectableTeam team={team2} onClick={handleTeam2Picked} pickedTeam={pickedTeam} isRightSide={true} />
+			<PredictionTeamCard team={team2} onClick={handleTeam2Picked} pickedTeam={pickedTeam} isRightSide={true} />
 		</div>
 	);
 }
 
-type MatchProps = {
+type PredictionMatchProps = {
 	match: ApiMatch | ApiMatchResult;
 	picks: MatchPicks;
 	setPicks: React.Dispatch<React.SetStateAction<MatchPicks>>;
-	isActiveVoting: boolean;
 };

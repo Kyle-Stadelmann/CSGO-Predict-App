@@ -1,7 +1,7 @@
-import LeaderboardList from "../Leaderboard/LeaderboardList";
-import { League, LeagueDay } from "csgo-predict-api";
+import LeaderboardList from "./Leaderboard/LeaderboardList";
+import { League } from "csgo-predict-api";
 import { useState } from "react";
-import DaySelect from "../DaySelect";
+import DaySelect from "./Common/DaySelect";
 
 export default function Leaderboard({ league }: LeaderboardProps) {
 	// TODO: why are days strings and not numbers ....

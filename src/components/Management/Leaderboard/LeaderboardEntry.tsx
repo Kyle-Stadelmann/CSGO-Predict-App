@@ -1,6 +1,6 @@
 import { User } from "csgo-predict-api";
 import { Avatar } from "@mui/material";
-import UserAvatar from "../UserAvatar";
+import UserAvatar from "../../UserAvatar";
 
 // can copy implementation of match if you want to link player pics to player profiles
 // (assuming we add profiles)
@@ -16,12 +16,12 @@ export default function LeaderboardEntry({
 }: LeaderboardEntryProps) {
 	return (
 		<div className="leaderboard-entry">
-			<div style={{ display: "flex", alignItems: "center" }}>
+			<div style={{ display: "flex", alignItems: "center", minWidth: "100px", flexGrow: 1 }}>
 				<h2 style={{ paddingRight: 5 }}>{`#${placing}`}</h2>
 				<UserAvatar user={user} style={{ paddingRight: 5 }} />
 				<h2>{user.name}</h2>
 			</div>
-			<h2>{`+ ${dayScore}/${maxDayScore}`}</h2>
+			<h2 style={{ width: "125px" }}>{`+ ${dayScore}/${maxDayScore}`}</h2>
 			<h2>{`+ ${runningScore}/${maxRunningScore}`}</h2>
 		</div>
 	);

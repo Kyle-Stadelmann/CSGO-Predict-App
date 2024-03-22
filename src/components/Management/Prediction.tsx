@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { USER_SESSION_STORAGE_KEY, getStoredUser } from "../../lib/user-util";
-import Matches from "../Voting/Matches";
+import Matches from "./Prediction/PredictionMatches";
 import {
 	DayPredictions,
-	Prediction,
+	Prediction as ApiPrediction,
 	submitDayPredictions,
-	Match as ApiMatch,
+	Match,
 	Id,
 	getDayPredictions,
 	League,
@@ -14,15 +14,15 @@ import {
 	getResultsFromDay,
 } from "csgo-predict-api";
 import { DEFAULT_LEAGUE_ID } from "../../constant";
-import DaySelect from "../DaySelect";
+import DaySelect from "./Common/DaySelect";
 
 // Match id -> Picked team Id
 export interface MatchPicks {
 	[match_id: Id]: Id;
 }
 
-export default function Voting({ league }: VotingProps) {
-	const [upcomingMatches, setUpcomingMatches] = useState([] as ApiMatch[]);
+export default function Prediction({ league }: PredictionProps) {
+	const [upcomingMatches, setUpcomingMatches] = useState([] as Match[]);
 	const [picks, setPicks] = useState({} as MatchPicks);
 	const [predSubmissionHeader, setPredSubmissionHeader] = useState(<></>);
 
@@ -70,13 +70,13 @@ export default function Voting({ league }: VotingProps) {
 		}
 	}
 
-	function getPredictionsList(): Prediction[] {
+	function getPredictionsList(): ApiPrediction[] {
 		const predictions = upcomingMatches.flatMap((match) => {
 			if (!picks[match.id]) {
 				// No team picked, so we don't submit a prediction
 				return [];
 			}
-			const prediction: Prediction = {
+			const prediction: ApiPrediction = {
 				matchId: match.id,
 				choiceTeamId: picks[match.id],
 			};
@@ -176,6 +176,6 @@ export default function Voting({ league }: VotingProps) {
 	);
 }
 
-type VotingProps = {
+type PredictionProps = {
 	league: League;
 };

@@ -65,13 +65,24 @@
 	border: 2px solid;
 }
 
-.team-container {
+.prediction-team-container {
 	background-color: whitesmoke;
 	opacity: 0.6;
 	padding: 10px;
 	margin: 10px;
 	border: 2px solid;
 	pointer-events: all;
+	display: flex;
+	align-items: center;
+	width: 200px;
+}
+
+.history-team-container {
+	background-color: whitesmoke;
+	opacity: 0.6;
+	padding: 10px;
+	margin: 10px;
+	border: 2px solid;
 	display: flex;
 	align-items: center;
 	width: 200px;
@@ -128,7 +139,6 @@
 	background-color: #f5f5f5; /* this is whitesmoke */
 	opacity: 0.6;
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
 	width: 100%;
 }

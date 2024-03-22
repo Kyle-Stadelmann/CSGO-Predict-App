@@ -3,7 +3,7 @@
 // and the voting window (right side, voting (it exists already))
 import { League } from "csgo-predict-api";
 import Leaderboard from "./Leaderboard";
-import Voting from "./Voting";
+import Prediction from "./Prediction";
 import TopEight from "./TopEight";
 
 const Tournament = ({ league, topEightBool }: TournamentProps) => {
@@ -11,7 +11,7 @@ const Tournament = ({ league, topEightBool }: TournamentProps) => {
 		return (
 			<div className="tournament">
 				<Leaderboard league={league} />
-				<Voting league={league} />
+				<Prediction league={league} />
 			</div>
 		);
 	} else {

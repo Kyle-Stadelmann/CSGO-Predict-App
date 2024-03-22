@@ -1,14 +1,14 @@
 import { Team } from "csgo-predict-api";
 import { MouseEventHandler } from "react";
 
-export default function SelectableTeam({ team, onClick, pickedTeam, isRightSide }: SelectableTeamProps) {
+export default function PredictionTeamCard({ team, onClick, pickedTeam, isRightSide }: PredictionTeamCardProps) {
 	const opacity = pickedTeam && pickedTeam.id !== team.id ? 0.2 : undefined;
 	const justifyContent = isRightSide ? "right" : undefined;
 	const imgStyle = isRightSide ? { paddingLeft: "10px" } : { paddingRight: "10px" };
 
 	return (
 		<div
-			className="team-container"
+			className="prediction-team-container"
 			style={{ cursor: "pointer", opacity: opacity, justifyContent: justifyContent }}
 			onClick={onClick}
 		>
@@ -19,7 +19,7 @@ export default function SelectableTeam({ team, onClick, pickedTeam, isRightSide 
 	);
 }
 
-type SelectableTeamProps = {
+type PredictionTeamCardProps = {
 	team: Team;
 	onClick: MouseEventHandler<HTMLImageElement>;
 	pickedTeam?: Team;

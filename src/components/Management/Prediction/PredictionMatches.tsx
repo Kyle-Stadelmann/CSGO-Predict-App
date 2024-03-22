@@ -1,6 +1,6 @@
 import { Match as ApiMatch, MatchResult as ApiMatchResult } from "csgo-predict-api";
-import Match from "./Match";
-import { MatchPicks } from "../Pages/Voting";
+import PredictionMatch from "./PredictionMatch";
+import { MatchPicks } from "../Prediction";
 import List from "@mui/material/List";
 import { ListItem } from "@mui/material";
 
@@ -16,7 +16,7 @@ export default function Matches({ matches, picks, setPicks, isActiveVoting }: Ma
 	function createMatchElement(match: ApiMatch | ApiMatchResult): JSX.Element {
 		return (
 			<ListItem key={match.id} disablePadding>
-				<Match match={match} picks={picks} setPicks={setPicks} isActiveVoting={isActiveVoting} />
+				<PredictionMatch match={match} picks={picks} setPicks={setPicks} />
 			</ListItem>
 		);
 	}

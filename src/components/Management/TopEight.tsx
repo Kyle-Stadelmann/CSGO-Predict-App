@@ -3,14 +3,14 @@
 // user picks the 8 teams they think are gonna be in top 8 (champion stage)
 // user may not (re)submit this once the first match of the tournament has started
 
-import TopEightPicks from "../TopEight/TopEightPicks";
-import TopEightList from "../TopEight/TopEightList";
+import TopEightPicks from "./TopEight/TopEightPicks";
+import TopEightList from "./TopEight/TopEightList";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useEffect, useState } from "react";
-import TopEightTeam from "../TopEight/TopEightTeam";
-import TopEightTeamPicksBucket from "../TopEight/TopEightPicksBucket";
-import TopEightTeamListBucket from "../TopEight/TopEightListBucket";
+import TopEightTeam from "./TopEight/TopEightTeam";
+import TopEightTeamPicksBucket from "./TopEight/TopEightPicksBucket";
+import TopEightTeamListBucket from "./TopEight/TopEightListBucket";
 import {
 	League,
 	Team,
