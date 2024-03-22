@@ -13,7 +13,7 @@ export default function PredictionTeamCard({ team, onClick, pickedTeam, isRightS
 			onClick={onClick}
 		>
 			{isRightSide ? <h3>{team.name}</h3> : <></>}
-			<img src={team.logo_url} alt="Missing Logo" style={{ ...imgStyle, width: "45%" }} />
+			<img src={team.logo_url} alt="Missing Logo" style={{ ...imgStyle, width: "100px" }} />
 			{isRightSide ? <></> : <h3>{team.name}</h3>}
 		</div>
 	);

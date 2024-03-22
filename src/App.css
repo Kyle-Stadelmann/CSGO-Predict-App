@@ -63,6 +63,8 @@
 
 .match-list {
 	border: 2px solid;
+	max-height: 500px;
+	overflow: auto;
 }
 
 .prediction-team-container {
@@ -74,7 +76,7 @@
 	pointer-events: all;
 	display: flex;
 	align-items: center;
-	width: 200px;
+	width: 350px;
 }
 
 .history-team-container {
@@ -86,9 +88,6 @@
 	display: flex;
 	align-items: center;
 	width: 350px;
-}
-
-.history-users-preds {
 }
 
 .versus {
