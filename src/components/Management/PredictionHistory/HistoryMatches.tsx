@@ -1,9 +1,9 @@
-import { MatchResult } from "csgo-predict-api";
+import { MatchResult, UserLeagueDayResults } from "csgo-predict-api";
 import List from "@mui/material/List";
 import { ListItem } from "@mui/material";
 import HistoryMatch from "./HistoryMatch";
 
-export default function HistoryMatches({ matches }: HistoryMatchesProps) {
+export default function HistoryMatches({ matches, userResults }: HistoryMatchesProps) {
 	function createMatchesElement(): JSX.Element {
 		return (
 			<List className="match-list" disablePadding>
@@ -15,7 +15,7 @@ export default function HistoryMatches({ matches }: HistoryMatchesProps) {
 	function createMatchElement(match: MatchResult): JSX.Element {
 		return (
 			<ListItem key={match.id} disablePadding>
-				<HistoryMatch match={match} />
+				<HistoryMatch match={match} userResults={userResults} />
 			</ListItem>
 		);
 	}
@@ -25,4 +25,5 @@ export default function HistoryMatches({ matches }: HistoryMatchesProps) {
 
 type HistoryMatchesProps = {
 	matches: MatchResult[];
+	userResults: UserLeagueDayResults[];
 };

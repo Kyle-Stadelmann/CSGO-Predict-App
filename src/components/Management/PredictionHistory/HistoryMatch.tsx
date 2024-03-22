@@ -1,21 +1,22 @@
-import { MatchResult } from "csgo-predict-api";
+import { MatchResult, UserLeagueDayResults } from "csgo-predict-api";
 import HistoryTeamCard from "./HistoryTeamCard";
 
-export default function HistoryMatch({ match }: HistoryMatchProps) {
+export default function HistoryMatch({ match, userResults }: HistoryMatchProps) {
 	const team1 = match.team1;
 	const team2 = match.team2;
 
 	return (
 		<div className="match">
-			<HistoryTeamCard team={team1} isRightSide={false} />
+			<HistoryTeamCard match={match} team={team1} isRightSide={false} userResults={userResults} />
 			<span className="versus">
 				<h2>vs</h2>
 			</span>
-			<HistoryTeamCard team={team2} isRightSide={true} />
+			<HistoryTeamCard match={match} team={team2} isRightSide={true} userResults={userResults} />
 		</div>
 	);
 }
 
 type HistoryMatchProps = {
 	match: MatchResult;
+	userResults: UserLeagueDayResults[];
 };

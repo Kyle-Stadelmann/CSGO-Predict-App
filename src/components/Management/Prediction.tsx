@@ -12,6 +12,7 @@ import {
 	getCurrentDayMatches,
 	MatchResult,
 	getResultsFromDay,
+	UserLeagueDayResults,
 } from "csgo-predict-api";
 import { DEFAULT_LEAGUE_ID } from "../../constant";
 import DaySelect from "./Common/DaySelect";
@@ -34,9 +35,10 @@ export default function Prediction({ league }: PredictionProps) {
 
 	const [results, setResults] = useState([] as MatchResult[]);
 
-	const date = new Date();
 	const isActivePredicting =
-		upcomingMatches.length > 0 && predDay === upcomingMatches[0].day && upcomingMatches.some((m) => m.date > date);
+		upcomingMatches.length > 0 &&
+		predDay === upcomingMatches[0].day &&
+		upcomingMatches.some((m) => m.date > new Date());
 
 	async function submitPredictions() {
 		const user = getStoredUser();
@@ -102,6 +104,7 @@ export default function Prediction({ league }: PredictionProps) {
 			setResults(await getResultsFromDay(DEFAULT_LEAGUE_ID, day));
 		} catch (e) {
 			console.error(e);
+			setResults([]);
 		}
 	}
 
@@ -125,27 +128,20 @@ export default function Prediction({ league }: PredictionProps) {
 		}
 	}
 
-	function tryCreateSubmitBtn(): JSX.Element {
-		if (isActivePredicting) {
-			return (
-				<div>
-					<button type="button" className="submit-predictions-btn" onClick={submitPredictions}>
-						Submit Predictions!
-					</button>
-					{predSubmissionHeader}
-				</div>
-			);
-		} else {
-			return <div></div>;
-		}
-	}
-
 	function createSubmittedHeader(str: string, success: boolean): JSX.Element {
 		return (
 			<h2 className="submit-predictions-str" style={{ color: success ? "green" : "red" }}>
 				{str}
 			</h2>
 		);
+	}
+
+	function getUserResults(): UserLeagueDayResults[] {
+		const ld = league.daysMap.get(predDay);
+		if (!ld || ld.userScores.size === 0) {
+			return [];
+		}
+		return [...ld.userScores.values()];
 	}
 
 	useEffect(() => {
@@ -165,11 +161,16 @@ export default function Prediction({ league }: PredictionProps) {
 				<DaySelect day={predDay} setDay={setPredDay} days={days} maxDay={maxDay} />
 			</div>
 			{isActivePredicting ? (
-				<PredictionMatches matches={upcomingMatches} picks={picks} setPicks={setPicks} />
+				<div>
+					<PredictionMatches matches={upcomingMatches} picks={picks} setPicks={setPicks} />
+					<button type="button" className="submit-predictions-btn" onClick={submitPredictions}>
+						Submit Predictions!
+					</button>
+					{predSubmissionHeader}
+				</div>
 			) : (
-				<HistoryMatches matches={results} />
+				<HistoryMatches matches={results} userResults={getUserResults()} />
 			)}
-			{tryCreateSubmitBtn()}
 		</div>
 	);
 }
