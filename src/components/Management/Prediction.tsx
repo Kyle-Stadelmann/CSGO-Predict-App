@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { USER_SESSION_STORAGE_KEY, getStoredUser } from "../../lib/user-util";
-import Matches from "./Prediction/PredictionMatches";
+import PredictionMatches from "./Prediction/PredictionMatches";
 import {
 	DayPredictions,
 	Prediction as ApiPrediction,
@@ -15,6 +15,7 @@ import {
 } from "csgo-predict-api";
 import { DEFAULT_LEAGUE_ID } from "../../constant";
 import DaySelect from "./Common/DaySelect";
+import HistoryMatches from "./PredictionHistory/HistoryMatches";
 
 // Match id -> Picked team Id
 export interface MatchPicks {
@@ -163,7 +164,11 @@ export default function Prediction({ league }: PredictionProps) {
 				<h1>Prediction {isActivePredicting ? "" : "History"}</h1>
 				<DaySelect day={predDay} setDay={setPredDay} days={days} maxDay={maxDay} />
 			</div>
-			<Matches matches={isActivePredicting ? upcomingMatches : results} picks={picks} setPicks={setPicks} />
+			{isActivePredicting ? (
+				<PredictionMatches matches={upcomingMatches} picks={picks} setPicks={setPicks} />
+			) : (
+				<HistoryMatches matches={results} />
+			)}
 			{tryCreateSubmitBtn()}
 		</div>
 	);

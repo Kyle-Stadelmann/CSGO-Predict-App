@@ -1,5 +1,4 @@
-// TODO: add a submitted status indicator at the right side
-import { Match as ApiMatch, Team as ApiTeam, MatchResult as ApiMatchResult } from "csgo-predict-api";
+import { Match, Team } from "csgo-predict-api";
 import { MatchPicks } from "../Prediction";
 import PredictionTeamCard from "./PredictionTeamCard";
 
@@ -8,7 +7,7 @@ export default function PredictionMatch({ match, picks, setPicks }: PredictionMa
 	const team2 = match.team2;
 	const pickedTeam = getPickedTeam();
 
-	function getPickedTeam(): ApiTeam | undefined {
+	function getPickedTeam(): Team | undefined {
 		const pickedTeamId = picks[match.id];
 		switch (pickedTeamId) {
 			case team1.id:
@@ -56,7 +55,7 @@ export default function PredictionMatch({ match, picks, setPicks }: PredictionMa
 }
 
 type PredictionMatchProps = {
-	match: ApiMatch | ApiMatchResult;
+	match: Match;
 	picks: MatchPicks;
 	setPicks: React.Dispatch<React.SetStateAction<MatchPicks>>;
 };
