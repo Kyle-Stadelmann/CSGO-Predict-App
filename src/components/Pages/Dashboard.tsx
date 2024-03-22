@@ -1,5 +1,4 @@
-// this page will host all available tournaments instead of a single <Voting />
-// each <Voting /> will be housed in a <Tournament /> page rather than in here
+// this page will host all available tournaments
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {

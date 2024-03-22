@@ -4,7 +4,7 @@ import { MatchPicks } from "../Prediction";
 import List from "@mui/material/List";
 import { ListItem } from "@mui/material";
 
-export default function Matches({ matches, picks, setPicks, isActiveVoting }: MatchesProps) {
+export default function Matches({ matches, picks, setPicks }: MatchesProps) {
 	function createMatchesElement(): JSX.Element {
 		return (
 			<List className="match-list" disablePadding>
@@ -28,5 +28,4 @@ type MatchesProps = {
 	matches: ApiMatch[] | ApiMatchResult[];
 	picks: MatchPicks;
 	setPicks: React.Dispatch<React.SetStateAction<MatchPicks>>;
-	isActiveVoting: boolean;
 };

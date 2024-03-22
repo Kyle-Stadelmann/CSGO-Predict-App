@@ -29,15 +29,13 @@ export default function Prediction({ league }: PredictionProps) {
 	// TODO: why are days strings and not numbers ....
 	const days = [...league.daysMap.keys()].sort((a, b) => +a - +b).reverse();
 	const maxDay = Math.max(...days);
-	const [votingDay, setVotingDay] = useState(maxDay);
+	const [predDay, setPredDay] = useState(maxDay);
 
 	const [results, setResults] = useState([] as MatchResult[]);
 
 	const date = new Date();
-	const isActiveVoting =
-		upcomingMatches.length > 0 &&
-		votingDay === upcomingMatches[0].day &&
-		upcomingMatches.some((m) => m.date > date);
+	const isActivePredicting =
+		upcomingMatches.length > 0 && predDay === upcomingMatches[0].day && upcomingMatches.some((m) => m.date > date);
 
 	async function submitPredictions() {
 		const user = getStoredUser();
@@ -127,7 +125,7 @@ export default function Prediction({ league }: PredictionProps) {
 	}
 
 	function tryCreateSubmitBtn(): JSX.Element {
-		if (isActiveVoting) {
+		if (isActivePredicting) {
 			return (
 				<div>
 					<button type="button" className="submit-predictions-btn" onClick={submitPredictions}>
@@ -156,21 +154,16 @@ export default function Prediction({ league }: PredictionProps) {
 
 	// TODO: Reduce the number of times we fetchResults
 	useEffect(() => {
-		if (!isActiveVoting || maxDay !== votingDay) fetchResults(votingDay);
-	}, [isActiveVoting, maxDay, votingDay]);
+		if (!isActivePredicting || maxDay !== predDay) fetchResults(predDay);
+	}, [isActivePredicting, maxDay, predDay]);
 
 	return (
-		<div className="voting-window">
+		<div className="prediction-window">
 			<div style={{ display: "flex", justifyContent: "space-between" }}>
-				<h1>Voting {isActiveVoting ? "" : "History"}</h1>
-				<DaySelect day={votingDay} setDay={setVotingDay} days={days} maxDay={maxDay} />
+				<h1>Prediction {isActivePredicting ? "" : "History"}</h1>
+				<DaySelect day={predDay} setDay={setPredDay} days={days} maxDay={maxDay} />
 			</div>
-			<Matches
-				matches={isActiveVoting ? upcomingMatches : results}
-				picks={picks}
-				setPicks={setPicks}
-				isActiveVoting={isActiveVoting}
-			/>
+			<Matches matches={isActivePredicting ? upcomingMatches : results} picks={picks} setPicks={setPicks} />
 			{tryCreateSubmitBtn()}
 		</div>
 	);
