@@ -1,27 +1,26 @@
-import { Divider, List, ListItem } from "@mui/material";
+import { Divider } from "@mui/material";
 import { MatchResult, Team, UserLeagueDayResults } from "csgo-predict-api";
 import UserAvatar from "../../UserAvatar";
+import Grid from "@mui/system/Unstable_Grid";
 
 export default function HistoryTeamCard({ match, team, isRightSide, userResults }: HistoryTeamCardProps) {
-	const justifyContent = isRightSide ? "right" : undefined;
 	const imgStyle = isRightSide ? { paddingLeft: "10px" } : { paddingRight: "10px" };
 
 	return (
-		<div className="history-team-container" style={{ justifyContent: justifyContent }}>
-			{isRightSide ? <h3>{team.name}</h3> : <></>}
-			<img src={team.logo_url} alt="Missing Logo" style={{ ...imgStyle, width: "45%" }} />
-			{isRightSide ? <></> : <h3>{team.name}</h3>}
+		<div className="history-team-container" style={{ flexDirection: isRightSide ? "row-reverse" : undefined }}>
+			<img src={team.logo_url} alt="Missing Logo" style={{ ...imgStyle, width: "100px" }} />
+			<h3>{team.name}</h3>
 			<Divider orientation="vertical" flexItem />
-			<List>
+			<Grid container spacing={2}>
 				{userResults.flatMap((userResult) => {
 					if (userResult.predictions.get(match.id)?.predictionTeamId !== team.id) return [];
 					return (
-						<ListItem key={userResult.user.id}>
+						<Grid>
 							<UserAvatar user={userResult.user} />
-						</ListItem>
+						</Grid>
 					);
 				})}
-			</List>
+			</Grid>
 		</div>
 	);
 }

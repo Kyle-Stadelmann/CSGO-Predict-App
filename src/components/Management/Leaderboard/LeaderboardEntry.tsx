@@ -1,5 +1,4 @@
 import { User } from "csgo-predict-api";
-import { Avatar } from "@mui/material";
 import UserAvatar from "../../UserAvatar";
 
 // can copy implementation of match if you want to link player pics to player profiles
