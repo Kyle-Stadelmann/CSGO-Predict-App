@@ -11,16 +11,18 @@ export default function HistoryTeamCard({ match, team, isRightSide, userResults 
 			<img src={team.logo_url} alt="Missing Logo" style={{ ...imgStyle, width: "100px" }} />
 			<h3>{team.name}</h3>
 			<Divider orientation="vertical" flexItem />
-			<Grid container spacing={2}>
-				{userResults.flatMap((userResult) => {
-					if (userResult.predictions.get(match.id)?.predictionTeamId !== team.id) return [];
-					return (
-						<Grid>
-							<UserAvatar user={userResult.user} />
-						</Grid>
-					);
-				})}
-			</Grid>
+			<div className="history-users-preds">
+				<Grid container spacing={1} sx={{ maxHeight: "100px", maxWidth: "200px", overflow: "auto" }}>
+					{userResults.flatMap((userResult) => {
+						if (userResult.predictions.get(match.id)?.predictionTeamId !== team.id) return [];
+						return (
+							<Grid>
+								<UserAvatar user={userResult.user} />
+							</Grid>
+						);
+					})}
+				</Grid>
+			</div>
 		</div>
 	);
 }
