@@ -1,17 +1,14 @@
-// this will be the main content of the Management page
-// it will contain the leaderboard (left side, user scores in that tournament)
-// and the voting window (right side, voting (it exists already))
 import { League } from "csgo-predict-api";
 import Leaderboard from "./Leaderboard";
-import Voting from "./Voting";
+import Prediction from "./Prediction";
 import TopEight from "./TopEight";
 
-const Tournament = ({ league, topEightBool }: TournamentProps) => {
+export default function Tournament({ league, topEightBool }: TournamentProps) {
 	if (!topEightBool) {
 		return (
 			<div className="tournament">
 				<Leaderboard league={league} />
-				<Voting league={league} />
+				<Prediction league={league} />
 			</div>
 		);
 	} else {
@@ -21,11 +18,9 @@ const Tournament = ({ league, topEightBool }: TournamentProps) => {
 			</div>
 		);
 	}
-};
+}
 
 type TournamentProps = {
 	league: League;
 	topEightBool: boolean;
 };
-
-export default Tournament;

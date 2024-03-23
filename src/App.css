@@ -63,9 +63,11 @@
 
 .match-list {
 	border: 2px solid;
+	max-height: 500px;
+	overflow: auto;
 }
 
-.team-container {
+.prediction-team-container {
 	background-color: whitesmoke;
 	opacity: 0.6;
 	padding: 10px;
@@ -74,7 +76,18 @@
 	pointer-events: all;
 	display: flex;
 	align-items: center;
-	width: 200px;
+	width: 350px;
+}
+
+.history-team-container {
+	background-color: whitesmoke;
+	opacity: 0.6;
+	padding: 10px;
+	margin: 10px;
+	border: 2px solid;
+	display: flex;
+	align-items: center;
+	width: 350px;
 }
 
 .versus {
@@ -105,7 +118,7 @@
 	right: 0;
 }
 
-.voting-window {
+.prediction-window {
 	padding: 40px;
 	flex: 1;
 }
@@ -128,7 +141,6 @@
 	background-color: #f5f5f5; /* this is whitesmoke */
 	opacity: 0.6;
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
 	width: 100%;
 }

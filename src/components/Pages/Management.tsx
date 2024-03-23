@@ -4,7 +4,7 @@
 // it'll have a header containing the above information then the tournament below the header
 import { getLeagueById, League } from "csgo-predict-api";
 import { useEffect, useState } from "react";
-import Tournament from "./Tournament";
+import Tournament from "../Management/Tournament";
 import { DEFAULT_LEAGUE_ID } from "../../constant";
 import { USER_SESSION_STORAGE_KEY } from "../../lib/user-util";
 import { ToggleButton } from "@mui/material";

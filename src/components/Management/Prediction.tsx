@@ -1,43 +1,44 @@
 import { useEffect, useState } from "react";
 import { USER_SESSION_STORAGE_KEY, getStoredUser } from "../../lib/user-util";
-import Matches from "../Voting/Matches";
+import PredictionMatches from "./Prediction/PredictionMatches";
 import {
 	DayPredictions,
-	Prediction,
+	Prediction as ApiPrediction,
 	submitDayPredictions,
-	Match as ApiMatch,
+	Match,
 	Id,
 	getDayPredictions,
 	League,
 	getCurrentDayMatches,
 	MatchResult,
 	getResultsFromDay,
+	UserLeagueDayResults,
 } from "csgo-predict-api";
 import { DEFAULT_LEAGUE_ID } from "../../constant";
-import DaySelect from "../DaySelect";
+import DaySelect from "./Common/DaySelect";
+import HistoryMatches from "./PredictionHistory/HistoryMatches";
 
 // Match id -> Picked team Id
 export interface MatchPicks {
 	[match_id: Id]: Id;
 }
 
-export default function Voting({ league }: VotingProps) {
-	const [upcomingMatches, setUpcomingMatches] = useState([] as ApiMatch[]);
+export default function Prediction({ league }: PredictionProps) {
+	const [upcomingMatches, setUpcomingMatches] = useState([] as Match[]);
 	const [picks, setPicks] = useState({} as MatchPicks);
 	const [predSubmissionHeader, setPredSubmissionHeader] = useState(<></>);
 
 	// TODO: why are days strings and not numbers ....
 	const days = [...league.daysMap.keys()].sort((a, b) => +a - +b).reverse();
 	const maxDay = Math.max(...days);
-	const [votingDay, setVotingDay] = useState(maxDay);
+	const [predDay, setPredDay] = useState(maxDay);
 
 	const [results, setResults] = useState([] as MatchResult[]);
 
-	const date = new Date();
-	const isActiveVoting =
+	const isActivePredicting =
 		upcomingMatches.length > 0 &&
-		votingDay === upcomingMatches[0].day &&
-		upcomingMatches.some((m) => m.date > date);
+		predDay === upcomingMatches[0].day &&
+		upcomingMatches.some((m) => m.date > new Date());
 
 	async function submitPredictions() {
 		const user = getStoredUser();
@@ -70,13 +71,13 @@ export default function Voting({ league }: VotingProps) {
 		}
 	}
 
-	function getPredictionsList(): Prediction[] {
+	function getPredictionsList(): ApiPrediction[] {
 		const predictions = upcomingMatches.flatMap((match) => {
 			if (!picks[match.id]) {
 				// No team picked, so we don't submit a prediction
 				return [];
 			}
-			const prediction: Prediction = {
+			const prediction: ApiPrediction = {
 				matchId: match.id,
 				choiceTeamId: picks[match.id],
 			};
@@ -103,6 +104,7 @@ export default function Voting({ league }: VotingProps) {
 			setResults(await getResultsFromDay(DEFAULT_LEAGUE_ID, day));
 		} catch (e) {
 			console.error(e);
+			setResults([]);
 		}
 	}
 
@@ -126,27 +128,20 @@ export default function Voting({ league }: VotingProps) {
 		}
 	}
 
-	function tryCreateSubmitBtn(): JSX.Element {
-		if (isActiveVoting) {
-			return (
-				<div>
-					<button type="button" className="submit-predictions-btn" onClick={submitPredictions}>
-						Submit Predictions!
-					</button>
-					{predSubmissionHeader}
-				</div>
-			);
-		} else {
-			return <div></div>;
-		}
-	}
-
 	function createSubmittedHeader(str: string, success: boolean): JSX.Element {
 		return (
 			<h2 className="submit-predictions-str" style={{ color: success ? "green" : "red" }}>
 				{str}
 			</h2>
 		);
+	}
+
+	function getUserResults(): UserLeagueDayResults[] {
+		const ld = league.daysMap.get(predDay);
+		if (!ld || ld.userScores.size === 0) {
+			return [];
+		}
+		return [...ld.userScores.values()];
 	}
 
 	useEffect(() => {
@@ -156,26 +151,30 @@ export default function Voting({ league }: VotingProps) {
 
 	// TODO: Reduce the number of times we fetchResults
 	useEffect(() => {
-		if (!isActiveVoting || maxDay !== votingDay) fetchResults(votingDay);
-	}, [isActiveVoting, maxDay, votingDay]);
+		if (!isActivePredicting || maxDay !== predDay) fetchResults(predDay);
+	}, [isActivePredicting, maxDay, predDay]);
 
 	return (
-		<div className="voting-window">
+		<div className="prediction-window">
 			<div style={{ display: "flex", justifyContent: "space-between" }}>
-				<h1>Voting {isActiveVoting ? "" : "History"}</h1>
-				<DaySelect day={votingDay} setDay={setVotingDay} days={days} maxDay={maxDay} />
+				<h1>Prediction {isActivePredicting ? "" : "History"}</h1>
+				<DaySelect day={predDay} setDay={setPredDay} days={days} maxDay={maxDay} />
 			</div>
-			<Matches
-				matches={isActiveVoting ? upcomingMatches : results}
-				picks={picks}
-				setPicks={setPicks}
-				isActiveVoting={isActiveVoting}
-			/>
-			{tryCreateSubmitBtn()}
+			{isActivePredicting ? (
+				<div>
+					<PredictionMatches matches={upcomingMatches} picks={picks} setPicks={setPicks} />
+					<button type="button" className="submit-predictions-btn" onClick={submitPredictions}>
+						Submit Predictions!
+					</button>
+					{predSubmissionHeader}
+				</div>
+			) : (
+				<HistoryMatches matches={results} userResults={getUserResults()} />
+			)}
 		</div>
 	);
 }
 
-type VotingProps = {
+type PredictionProps = {
 	league: League;
 };

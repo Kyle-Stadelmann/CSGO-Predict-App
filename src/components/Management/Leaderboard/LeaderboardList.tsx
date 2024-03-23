@@ -1,4 +1,4 @@
-import { League, LeagueDay, User, UserLeagueDayResults } from "csgo-predict-api";
+import { League, LeagueDay, User } from "csgo-predict-api";
 import LeaderboardEntry from "./LeaderboardEntry";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
