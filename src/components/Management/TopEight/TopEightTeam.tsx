@@ -2,7 +2,6 @@ import { Team } from "csgo-predict-api";
 import { useDrag } from "react-dnd";
 import TopEightTeamInfo from "./TopEightTeamInfo";
 
-// TODO: generate type as `TEAM${teamInfo.rank}` if bucket solution works
 const TopEightTeam = ({ teamInfo }: TopEightTeamProps) => {
 	const [{ isDragging }, drag] = useDrag(() => ({
 		type: teamInfo.id.toString(),
