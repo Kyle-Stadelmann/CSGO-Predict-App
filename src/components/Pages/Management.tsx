@@ -39,7 +39,7 @@ const Management = () => {
 	if (league.settings.allowPlayoffPredictions) {
 		return (
 			<div className="management">
-				<h1>Management Page</h1>
+				<h1>{league.tournamentName}</h1>
 				{/* tournament selector goes here */}
 				<ToggleButton
 					className="top-eight-toggle-button"
@@ -62,7 +62,7 @@ const Management = () => {
 	} else {
 		return (
 			<div className="management">
-				<h1>Management Page</h1>
+				<h1>{league.tournamentName}</h1>
 				{/* tournament selector goes here */}
 				<Tournament league={league} topEightBool={topEightBool} />
 			</div>
