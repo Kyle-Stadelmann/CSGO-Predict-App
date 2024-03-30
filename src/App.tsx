@@ -28,7 +28,6 @@ function App() {
 		<div className="app" style={{ backgroundImage: `url(${THEME_IMGS[bgImageIndex]})` }}>
 			<ThemeProvider theme={theme}>
 				{/* This stuff will appear on top of every page */}
-				<Header title="CSGO Predictions" backgroundColor="blue" />
 
 				{/* This stuff will only appear on its path */}
 				<Routes>
