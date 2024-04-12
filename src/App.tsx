@@ -28,7 +28,7 @@ function App() {
 			},
 			text: {
 				primary: "#fff",
-				secondary: "rgba(255, 255, 255, 0.7)",
+				secondary: "rgba(255, 255, 255, .85)",
 				disabled: "rgba(255, 255, 255, 0.5)",
 			},
 			divider: "rgba(255, 255, 255, 0.12)",
