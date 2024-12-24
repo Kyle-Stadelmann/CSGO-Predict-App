@@ -7,8 +7,12 @@ export default function Tournament({ league, topEightBool }: TournamentProps) {
 	if (!topEightBool) {
 		return (
 			<div className="tournament">
-				<Leaderboard league={league} />
-				<Prediction league={league} />
+				<div style={{flex: 1}}>
+					<Leaderboard league={league} />
+				</div>
+				<div style={{flex: 2}}>
+					<Prediction league={league} />
+				</div>
 			</div>
 		);
 	} else {

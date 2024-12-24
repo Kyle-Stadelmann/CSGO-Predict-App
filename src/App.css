@@ -63,23 +63,11 @@
 
 .match-list {
 	border: 2px solid;
-	max-height: 500px;
+	max-height: 70vh;
 	overflow: auto;
 }
 
-.prediction-team-container {
-	background-color: whitesmoke;
-	opacity: 0.6;
-	padding: 10px;
-	margin: 10px;
-	border: 2px solid;
-	pointer-events: all;
-	display: flex;
-	align-items: center;
-	width: 350px;
-}
-
-.history-team-container {
+.team-container {
 	background-color: whitesmoke;
 	opacity: 0.6;
 	padding: 10px;
@@ -87,7 +75,7 @@
 	border: 2px solid;
 	display: flex;
 	align-items: center;
-	width: 350px;
+	flex: 1;
 }
 
 .versus {
@@ -120,12 +108,11 @@
 
 .prediction-window {
 	padding: 40px;
-	flex: 1;
 }
 
 .leaderboard-window {
 	padding: 40px;
-	flex: 1;
+	max-height: 70vh;
 }
 
 .management {

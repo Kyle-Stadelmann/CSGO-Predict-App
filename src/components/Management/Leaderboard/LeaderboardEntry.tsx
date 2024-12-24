@@ -15,12 +15,12 @@ export default function LeaderboardEntry({
 }: LeaderboardEntryProps) {
 	return (
 		<div className="leaderboard-entry">
+			<h2 style={{ minWidth: "45px", paddingRight: "10px" }}>{`#${placing}`}</h2>
 			<div style={{ display: "flex", alignItems: "center", minWidth: "100px", flexGrow: 1 }}>
-				<h2 style={{ paddingRight: 5 }}>{`#${placing}`}</h2>
 				<UserAvatar user={user} style={{ paddingRight: 5 }} />
 				<h2>{user.name}</h2>
 			</div>
-			<h2 style={{ width: "125px" }}>{`+ ${dayScore}/${maxDayScore}`}</h2>
+			<h2 style={{ minWidth: "125px" }}>{`+ ${dayScore}/${maxDayScore}`}</h2>
 			<h2>{`+ ${runningScore}/${maxRunningScore}`}</h2>
 		</div>
 	);

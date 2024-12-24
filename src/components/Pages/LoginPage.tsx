@@ -21,11 +21,10 @@ const LoginPage = () => {
 				user = await authPredictionUser(response.credential);
 			} catch (e) {
 				// TODO: Auth didn't work lets do something?
-				// Maybe just refresh page and start over? Not sure when this would happen.
+				// Right now, the site doesn't notify the user of any error
+				// Maybe just refresh page and start over? This signifies an error with our google auth
 				// Since we're in this callback it should succesfully auth
 				console.log(e);
-				const signInHeader = document.getElementById("signin-msg-header");
-				signInHeader!.innerHTML = "Sorry you're not whitelisted";
 				return;
 			}
 

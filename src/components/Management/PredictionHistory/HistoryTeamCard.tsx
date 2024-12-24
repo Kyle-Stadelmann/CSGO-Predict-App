@@ -15,7 +15,7 @@ export default function HistoryTeamCard({ match, team, isRightSide, userResults 
 				flexDirection: isRightSide ? "row-reverse" : undefined,
 			}}
 		>
-			<div className="history-team-container" style={{ flexDirection: isRightSide ? "row-reverse" : undefined }}>
+			<div className="team-container" style={{ flexDirection: isRightSide ? "row-reverse" : undefined }}>
 				<img src={team.logo_url} alt="Missing Logo" style={{ ...paddingStyle, width: "100px" }} />
 				<h3 style={{ ...paddingStyle, flexGrow: 1, textAlign: isRightSide ? "right" : "left" }}>{team.name}</h3>
 				<Grid

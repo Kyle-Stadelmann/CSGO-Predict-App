@@ -8,8 +8,8 @@ export default function PredictionTeamCard({ team, onClick, pickedTeam, isRightS
 
 	return (
 		<div
-			className="prediction-team-container"
-			style={{ cursor: "pointer", opacity: opacity, justifyContent: justifyContent }}
+			className="team-container"
+			style={{ pointerEvents: "all", cursor: "pointer", opacity: opacity, justifyContent: justifyContent }}
 			onClick={onClick}
 		>
 			{isRightSide ? <h3>{team.name}</h3> : <></>}
