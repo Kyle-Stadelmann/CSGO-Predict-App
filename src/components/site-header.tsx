@@ -18,6 +18,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { signOut, useSession } from "next-auth/react";
 
 const routes = [
 	{
@@ -51,11 +52,12 @@ export function SiteHeader() {
 	const pathname = usePathname();
 	const [isOpen, setIsOpen] = useState(false);
 
-	// Mock user data
+	const session = useSession();
+
 	const user = {
-		name: "John Doe",
-		email: "john@example.com",
-		avatar: "/placeholder.svg?height=40&width=40",
+		name: session.data?.user?.name,
+		email: session.data?.user?.email,
+		avatar: session.data?.user?.image,
 	};
 
 	return (
@@ -149,8 +151,10 @@ export function SiteHeader() {
 							</DropdownMenuGroup>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem>
-								<LogOut className="mr-2 h-4 w-4" />
-								<span>Log out</span>
+								<Button variant="ghost" className="p-0 h-7" onClick={() => signOut()}>
+									<LogOut className="mr-2 h-4 w-4" />
+									<span className="text-left">Log out</span>
+								</Button>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
