@@ -5,6 +5,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ReactNode } from "react";
+import "./globals.css";
+import AuthProvider from "@/components/auth-provider";
+import { getServerAuthSession } from "@/lib/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,7 +18,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-	const session = await auth();
+	const session = await getServerAuthSession();
 
 	return (
 		<html lang="en" suppressHydrationWarning>
@@ -34,7 +37,3 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 		</html>
 	);
 }
-
-import "./globals.css";
-import AuthProvider from "@/components/auth-provider";
-import { auth } from "@/lib/auth";

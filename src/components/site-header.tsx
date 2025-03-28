@@ -20,45 +20,43 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { signOut, useSession } from "next-auth/react";
 
-const routes = [
-	{
-		href: "/dashboard",
-		label: "Dashboard",
-		icon: Home,
-	},
-	{
-		href: "/predict",
-		label: "Predictions",
-		icon: BarChart3,
-	},
-	{
-		href: "/leagues",
-		label: "Leagues",
-		icon: Users,
-	},
-	{
-		href: "/leaderboard",
-		label: "Leaderboard",
-		icon: Award,
-	},
-	{
-		href: "/results",
-		label: "Results",
-		icon: Calendar,
-	},
-];
-
 export function SiteHeader() {
 	const pathname = usePathname();
 	const [isOpen, setIsOpen] = useState(false);
 
-	const session = useSession();
+	const session = useSession().data;
+	const user = session?.user;
+	const isAuthenticated = !!user;
 
-	const user = {
-		name: session.data?.user?.name,
-		email: session.data?.user?.email,
-		avatar: session.data?.user?.image,
-	};
+	const defaultRoute = isAuthenticated ? "/dashboard" : "/";
+
+	const routes = [
+		{
+			href: defaultRoute,
+			label: "Dashboard",
+			icon: Home,
+		},
+		{
+			href: "/predict",
+			label: "Predictions",
+			icon: BarChart3,
+		},
+		{
+			href: "/leagues",
+			label: "Leagues",
+			icon: Users,
+		},
+		{
+			href: "/leaderboard",
+			label: "Leaderboard",
+			icon: Award,
+		},
+		{
+			href: "/results",
+			label: "Results",
+			icon: Calendar,
+		},
+	];
 
 	return (
 		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -75,7 +73,7 @@ export function SiteHeader() {
 							<SheetHeader>
 								<SheetTitle>
 									<Link
-										href="/dashboard"
+										href={defaultRoute}
 										className="flex items-center gap-2 font-bold text-xl"
 										onClick={() => setIsOpen(false)}
 									>
@@ -103,7 +101,7 @@ export function SiteHeader() {
 						</SheetContent>
 					</Sheet>
 
-					<Link href="/dashboard" className="flex items-center gap-2 font-bold text-xl">
+					<Link href={defaultRoute} className="flex items-center gap-2 font-bold text-xl">
 						<Trophy className="h-5 w-5" />
 						<span className="hidden md:inline-block">CS2 Predictions</span>
 					</Link>
@@ -124,41 +122,42 @@ export function SiteHeader() {
 						))}
 					</nav>
 				</div>
-
-				<div className="flex items-center gap-4">
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" size="icon" className="relative h-8 w-8 rounded-full">
-								<Avatar className="h-8 w-8">
-									<AvatarImage src={user.avatar} alt={user.name} />
-									<AvatarFallback>JD</AvatarFallback>
-								</Avatar>
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent className="w-56" align="end" forceMount>
-							<DropdownMenuLabel className="font-normal">
-								<div className="flex flex-col space-y-1">
-									<p className="text-sm font-medium leading-none">{user.name}</p>
-									<p className="text-xs leading-none text-muted-foreground">{user.email}</p>
-								</div>
-							</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							<DropdownMenuGroup>
-								<DropdownMenuItem>
-									<User className="mr-2 h-4 w-4" />
-									<span>Profile</span>
-								</DropdownMenuItem>
-							</DropdownMenuGroup>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								<Button variant="ghost" className="p-0 h-7" onClick={() => signOut()}>
-									<LogOut className="mr-2 h-4 w-4" />
-									<span className="text-left">Log out</span>
+				{user && (
+					<div className="flex items-center gap-4">
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant="ghost" size="icon" className="relative h-8 w-8 rounded-full">
+									<Avatar className="h-8 w-8">
+										<AvatarImage src={user.picture} alt={user.name} />
+										<AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+									</Avatar>
 								</Button>
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</div>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent className="w-56" align="end" forceMount>
+								<DropdownMenuLabel className="font-normal">
+									<div className="flex flex-col space-y-1">
+										<p className="text-sm font-medium leading-none">{user.name}</p>
+										<p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+									</div>
+								</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								<DropdownMenuGroup>
+									<DropdownMenuItem>
+										<User className="mr-2 h-4 w-4" />
+										<span>Profile</span>
+									</DropdownMenuItem>
+								</DropdownMenuGroup>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem>
+									<Button variant="ghost" className="p-0 h-7" onClick={() => signOut()}>
+										<LogOut className="mr-2 h-4 w-4" />
+										<span className="text-left">Log out</span>
+									</Button>
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</div>
+				)}
 			</div>
 		</header>
 	);
