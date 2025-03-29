@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { RecentResults } from "@/components/recent-results";
 import { TopPredictors } from "@/components/top-predictors";
-import { LeagueSelector } from "@/components/league-selector";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { MatchPredictions } from "@/components/match-predictions";
 import { getServerAuthSession } from "@/lib/auth";
@@ -27,9 +26,10 @@ export default async function DashboardPage() {
 			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 				<div>
 					<h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-					<p className="text-muted-foreground">Welcome back! Here's what's happening in your leagues</p>
+					<p className="text-muted-foreground">
+						Welcome back! Here&apos;s what&apos;s happening in your leagues
+					</p>
 				</div>
-				<LeagueSelector />
 			</div>
 
 			{!hasJoinedLeagues && (
@@ -37,7 +37,7 @@ export default async function DashboardPage() {
 					<Users className="h-4 w-4" />
 					<AlertTitle>No leagues joined</AlertTitle>
 					<AlertDescription>
-						You haven't joined any prediction leagues yet.
+						You haven&apos;t joined any prediction leagues yet.
 						<Link href="/leagues" className="font-medium underline underline-offset-4 ml-1">
 							Join or create a league
 						</Link>{" "}

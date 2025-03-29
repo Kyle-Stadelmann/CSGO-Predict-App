@@ -2,12 +2,13 @@ import "@/app/globals.css";
 import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ReactNode } from "react";
 import "./globals.css";
-import AuthProvider from "@/components/auth-provider";
+import AuthProvider from "@/contexts/auth-provider";
 import { getServerAuthSession } from "@/lib/auth";
+import { SiteHeaderWrapper } from "@/components/site-header-wrapper";
+import { LeagueProvider } from "@/contexts/league-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,14 +25,16 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 		<html lang="en" suppressHydrationWarning>
 			<body className={inter.className}>
 				<AuthProvider session={session}>
-					<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-						<div className="relative min-h-screen flex flex-col">
-							<SiteHeader />
-							<main className="flex-1">{children}</main>
-							<SiteFooter />
-						</div>
-						<Toaster />
-					</ThemeProvider>
+					<LeagueProvider>
+						<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+							<div className="relative min-h-screen flex flex-col">
+								<SiteHeaderWrapper />
+								<main className="flex-1">{children}</main>
+								<SiteFooter />
+							</div>
+							<Toaster />
+						</ThemeProvider>
+					</LeagueProvider>
 				</AuthProvider>
 			</body>
 		</html>

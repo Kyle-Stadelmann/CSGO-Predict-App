@@ -19,8 +19,42 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { signOut, useSession } from "next-auth/react";
+import { LeagueSelector } from "./league-selector";
+import { LeagueSummary } from "csgo-predict-api";
 
-export function SiteHeader() {
+const routes = [
+	{
+		href: "/dashboard",
+		label: "Dashboard",
+		icon: Home,
+	},
+	{
+		href: "/predict",
+		label: "Predictions",
+		icon: BarChart3,
+	},
+	{
+		href: "/leagues",
+		label: "Leagues",
+		icon: Users,
+	},
+	{
+		href: "/leaderboard",
+		label: "Leaderboard",
+		icon: Award,
+	},
+	{
+		href: "/results",
+		label: "Results",
+		icon: Calendar,
+	},
+];
+
+interface SiteHeaderProps {
+	leagueSummaries: LeagueSummary[];
+}
+
+export function SiteHeader({ leagueSummaries }: SiteHeaderProps) {
 	const pathname = usePathname();
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -29,34 +63,6 @@ export function SiteHeader() {
 	const isAuthenticated = !!user;
 
 	const defaultRoute = isAuthenticated ? "/dashboard" : "/";
-
-	const routes = [
-		{
-			href: defaultRoute,
-			label: "Dashboard",
-			icon: Home,
-		},
-		{
-			href: "/predict",
-			label: "Predictions",
-			icon: BarChart3,
-		},
-		{
-			href: "/leagues",
-			label: "Leagues",
-			icon: Users,
-		},
-		{
-			href: "/leaderboard",
-			label: "Leaderboard",
-			icon: Award,
-		},
-		{
-			href: "/results",
-			label: "Results",
-			icon: Calendar,
-		},
-	];
 
 	return (
 		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -82,22 +88,24 @@ export function SiteHeader() {
 									</Link>
 								</SheetTitle>
 							</SheetHeader>
-							<nav className="flex flex-col gap-4 mt-8">
-								{routes.map((route) => (
-									<Link
-										key={route.href}
-										href={route.href}
-										onClick={() => setIsOpen(false)}
-										className={cn(
-											"flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md hover:bg-muted",
-											pathname === route.href ? "bg-muted" : "transparent"
-										)}
-									>
-										<route.icon className="h-5 w-5" />
-										{route.label}
-									</Link>
-								))}
-							</nav>
+							{isAuthenticated && (
+								<nav className="flex flex-col gap-4 mt-8">
+									{routes.map((route) => (
+										<Link
+											key={route.href}
+											href={route.href}
+											onClick={() => setIsOpen(false)}
+											className={cn(
+												"flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md hover:bg-muted",
+												pathname === route.href ? "bg-muted" : "transparent"
+											)}
+										>
+											<route.icon className="h-5 w-5" />
+											{route.label}
+										</Link>
+									))}
+								</nav>
+							)}
 						</SheetContent>
 					</Sheet>
 
@@ -106,24 +114,27 @@ export function SiteHeader() {
 						<span className="hidden md:inline-block">CS2 Predictions</span>
 					</Link>
 
-					<nav className="hidden md:flex items-center gap-6">
-						{routes.map((route) => (
-							<Link
-								key={route.href}
-								href={route.href}
-								className={cn(
-									"flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary",
-									pathname === route.href ? "text-primary" : "text-muted-foreground"
-								)}
-							>
-								<route.icon className="h-4 w-4" />
-								{route.label}
-							</Link>
-						))}
-					</nav>
+					{isAuthenticated && (
+						<nav className="hidden md:flex items-center gap-6">
+							{routes.map((route) => (
+								<Link
+									key={route.href}
+									href={route.href}
+									className={cn(
+										"flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary",
+										pathname === route.href ? "text-primary" : "text-muted-foreground"
+									)}
+								>
+									<route.icon className="h-4 w-4" />
+									{route.label}
+								</Link>
+							))}
+						</nav>
+					)}
 				</div>
 				{user && (
 					<div className="flex items-center gap-4">
+						<LeagueSelector leagueSummaries={leagueSummaries} />
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<Button variant="ghost" size="icon" className="relative h-8 w-8 rounded-full">
@@ -143,13 +154,19 @@ export function SiteHeader() {
 								<DropdownMenuSeparator />
 								<DropdownMenuGroup>
 									<DropdownMenuItem>
-										<User className="mr-2 h-4 w-4" />
-										<span>Profile</span>
+										<Button variant="ghost" className="p-0 h-7 w-full justify-start">
+											<User className="mr-2 h-4 w-4" />
+											<span>Profile</span>
+										</Button>
 									</DropdownMenuItem>
 								</DropdownMenuGroup>
 								<DropdownMenuSeparator />
 								<DropdownMenuItem>
-									<Button variant="ghost" className="p-0 h-7" onClick={() => signOut()}>
+									<Button
+										variant="ghost"
+										className="p-0 h-7 w-full justify-start"
+										onClick={() => signOut()}
+									>
 										<LogOut className="mr-2 h-4 w-4" />
 										<span className="text-left">Log out</span>
 									</Button>
