@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { Trophy } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useLeague } from "@/contexts/league-context";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function TopPredictors() {
 	const { selectedLeague } = useLeague();
@@ -43,13 +43,10 @@ export function TopPredictors() {
 								i + 1
 							)}
 						</div>
-						<Image
-							src={user.picture || "/placeholder.svg"}
-							alt={user.name}
-							width={32}
-							height={32}
-							className="rounded-full"
-						/>
+						<Avatar className="h-8 w-8">
+							<AvatarImage src={user.picture} alt={user.name} />
+							<AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+						</Avatar>
 						<span className="font-medium">{user.name}</span>
 					</div>
 					<div

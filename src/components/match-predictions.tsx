@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { CalendarClock, CheckCircle2, Loader2 } from "lucide-react";
 
@@ -9,44 +9,60 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
+import { Id, Match } from "csgo-predict-api";
+import { useLeague } from "@/contexts/league-context";
+import { fetchCurrentMatches } from "@/lib/actions";
 
-// Mock upcoming matches data
-const upcomingMatches = [
-	{
-		id: "1",
-		team1: { id: "t1", name: "Natus Vincere", logo: "/placeholder.svg?height=60&width=60" },
-		team2: { id: "t2", name: "FaZe Clan", logo: "/placeholder.svg?height=60&width=60" },
-		date: "2023-07-15T14:00:00Z",
-		bo: 3,
-		tournament: "IEM Cologne 2023",
-		points: 10,
-	},
-	{
-		id: "2",
-		team1: { id: "t3", name: "Team Liquid", logo: "/placeholder.svg?height=60&width=60" },
-		team2: { id: "t4", name: "Vitality", logo: "/placeholder.svg?height=60&width=60" },
-		date: "2023-07-15T17:30:00Z",
-		bo: 3,
-		tournament: "IEM Cologne 2023",
-		points: 10,
-	},
-	{
-		id: "3",
-		team1: { id: "t5", name: "G2 Esports", logo: "/placeholder.svg?height=60&width=60" },
-		team2: { id: "t6", name: "Astralis", logo: "/placeholder.svg?height=60&width=60" },
-		date: "2023-07-16T12:00:00Z",
-		bo: 3,
-		tournament: "IEM Cologne 2023",
-		points: 15,
-	},
-];
+interface TeamCardProps {
+	teamName: string;
+	logoUrl?: string;
+	isSelected: boolean;
+	onClick: () => void;
+}
+
+function TeamCard({ teamName, logoUrl, isSelected, onClick }: TeamCardProps) {
+	return (
+		<div
+			className={cn(
+				"flex-1 flex flex-col items-center justify-center gap-3 p-4 rounded-lg cursor-pointer border-2 transition-all w-full sm:w-auto",
+				isSelected
+					? "border-primary bg-primary/5 shadow-md"
+					: "border-transparent hover:border-muted hover:bg-muted/20"
+			)}
+			onClick={onClick}
+		>
+			<div className="h-16 w-16 relative flex items-center justify-center rounded-full overflow-hidden">
+				<Image src={logoUrl || ""} alt={teamName} width={48} height={48} className="object-contain" />
+			</div>
+			<span className="text-lg font-medium text-center w-full">{teamName}</span>
+		</div>
+	);
+}
+
+export interface MatchPicks {
+	[match_id: Id]: Id;
+}
 
 export function MatchPredictions() {
-	const [predictions, setPredictions] = useState({});
+	const { selectedLeague } = useLeague();
+
+	const [predictions, setPredictions] = useState({} as MatchPicks);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isSubmitted, setIsSubmitted] = useState(false);
+	const [upcomingMatches, setUpcomingMatches] = useState([] as Match[]);
 
-	const handleTeamSelect = (matchId, teamId) => {
+	useEffect(() => {
+		if (selectedLeague) {
+			const fetchMatches = async () => {
+				const matches = await fetchCurrentMatches(selectedLeague.id);
+				console.log(matches);
+				setUpcomingMatches(matches);
+			};
+			fetchMatches().catch(console.error);
+		}
+	}, [selectedLeague]);
+
+	const handleTeamSelect = (matchId: Id, teamId: Id) => {
 		setPredictions((prev) => ({
 			...prev,
 			[matchId]: teamId,
@@ -66,8 +82,7 @@ export function MatchPredictions() {
 		setIsSubmitted(true);
 	};
 
-	const formatMatchTime = (dateString) => {
-		const date = new Date(dateString);
+	const formatMatchTime = (date: Date) => {
 		return date.toLocaleString("en-US", {
 			month: "short",
 			day: "numeric",
@@ -104,63 +119,31 @@ export function MatchPredictions() {
 										variant="outline"
 										className="font-semibold bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/20 dark:text-blue-400 dark:border-blue-900"
 									>
-										{match.points} points
+										{"TODO_X"} points
 									</Badge>
 								</div>
 
 								<div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-									<div
-										className={cn(
-											"flex-1 flex flex-col items-center gap-3 p-4 rounded-lg cursor-pointer border-2 transition-all",
-											predictions[match.id] === match.team1.id
-												? "border-primary bg-primary/5 shadow-md"
-												: "border-transparent hover:border-muted hover:bg-muted/20"
-										)}
+									<TeamCard
+										teamName={match.team1.name}
+										logoUrl={match.team1.logo_url}
+										isSelected={predictions[match.id] === match.team1.id}
 										onClick={() => handleTeamSelect(match.id, match.team1.id)}
-									>
-										<Image
-											src={match.team1.logo || "/placeholder.svg"}
-											alt={match.team1.name}
-											width={60}
-											height={60}
-											className={cn(
-												"rounded-full transition-all",
-												predictions[match.id] === match.team1.id
-													? "ring-2 ring-primary ring-offset-2 scale-110"
-													: "hover:scale-105"
-											)}
-										/>
-										<span className="text-lg font-medium text-center">{match.team1.name}</span>
-									</div>
+									/>
 
-									<div className="text-center">
+									<div className="text-center flex-shrink-0">
 										<div className="text-xl font-bold">VS</div>
-										<div className="text-sm text-muted-foreground">BO{match.bo}</div>
+										<div className="text-sm text-muted-foreground">
+											{match.format.toLocaleUpperCase()}
+										</div>
 									</div>
 
-									<div
-										className={cn(
-											"flex-1 flex flex-col items-center gap-3 p-4 rounded-lg cursor-pointer border-2 transition-all",
-											predictions[match.id] === match.team2.id
-												? "border-primary bg-primary/5 shadow-md"
-												: "border-transparent hover:border-muted hover:bg-muted/20"
-										)}
+									<TeamCard
+										teamName={match.team2.name}
+										logoUrl={match.team2.logo_url}
+										isSelected={predictions[match.id] === match.team2.id}
 										onClick={() => handleTeamSelect(match.id, match.team2.id)}
-									>
-										<Image
-											src={match.team2.logo || "/placeholder.svg"}
-											alt={match.team2.name}
-											width={60}
-											height={60}
-											className={cn(
-												"rounded-full transition-all",
-												predictions[match.id] === match.team2.id
-													? "ring-2 ring-primary ring-offset-2 scale-110"
-													: "hover:scale-105"
-											)}
-										/>
-										<span className="text-lg font-medium text-center">{match.team2.name}</span>
-									</div>
+									/>
 								</div>
 							</div>
 						</CardContent>
