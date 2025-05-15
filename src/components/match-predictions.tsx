@@ -3,15 +3,14 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { CalendarClock, CheckCircle2, Loader2 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
-import { Id, Match } from "csgo-predict-api";
+import { Id, Match, Prediction } from "csgo-predict-api";
 import { useLeague } from "@/contexts/league-context";
-import { fetchCurrentMatches } from "@/lib/actions";
+import { fetchCurrentMatches, fetchCurrentPredictions, submitMatchPredictions } from "@/lib/actions";
 
 interface TeamCardProps {
 	teamName: string;
@@ -53,12 +52,18 @@ export function MatchPredictions() {
 
 	useEffect(() => {
 		if (selectedLeague) {
-			const fetchMatches = async () => {
+			const fetchMatchesAndPredictions = async () => {
 				const matches = await fetchCurrentMatches(selectedLeague.id);
-				console.log(matches);
 				setUpcomingMatches(matches);
+
+				const preds = await fetchCurrentPredictions(selectedLeague.id);
+				const matchPicks: MatchPicks = {};
+				preds?.predictions.forEach((p) => {
+					matchPicks[p.matchId] = p.choiceTeamId;
+				});
+				setPredictions(matchPicks);
 			};
-			fetchMatches().catch(console.error);
+			fetchMatchesAndPredictions().catch(console.error);
 		}
 	}, [selectedLeague]);
 
@@ -70,16 +75,17 @@ export function MatchPredictions() {
 	};
 
 	const handleSubmitPredictions = async () => {
-		setIsSubmitting(true);
-
-		// Simulate API call
-		await new Promise((resolve) => setTimeout(resolve, 1500));
-
-		// Here you would submit the predictions to your backend
-		console.log("Submitting predictions:", predictions);
-
-		setIsSubmitting(false);
-		setIsSubmitted(true);
+		if (selectedLeague) {
+			const apiPreds = createApiPredictionList();
+			setIsSubmitting(true);
+			try {
+				submitMatchPredictions(selectedLeague.id, apiPreds);
+				setIsSubmitted(true);
+				setIsSubmitting(false);
+			} catch (e) {
+				console.error(e);
+			}
+		}
 	};
 
 	const formatMatchTime = (date: Date) => {
@@ -90,6 +96,21 @@ export function MatchPredictions() {
 			minute: "2-digit",
 		});
 	};
+
+	function createApiPredictionList(): Prediction[] {
+		const apiPredictions = upcomingMatches.flatMap((match) => {
+			if (!predictions[match.id]) {
+				return [];
+			}
+			const prediction: Prediction = {
+				matchId: match.id,
+				choiceTeamId: predictions[match.id],
+			};
+			return prediction;
+		});
+
+		return apiPredictions;
+	}
 
 	return (
 		<div className="space-y-6">
